@@ -59,6 +59,7 @@ angular.module('myApp.security', [])
             $rootScope.logout = function () {
                 $scope.isAuthenticated = false;
                 $scope.isAdmin = false;
+                $scope.isSuper = false;
                 $scope.isUser = false;
                 delete $window.sessionStorage.id_token;
                 $location.path("/view1");
@@ -152,6 +153,7 @@ function initializeFromToken($scope, token, jwtHelper) {
     var tokenPayload = jwtHelper.decodeToken(token);
     $scope.username = tokenPayload.username;
     $scope.isAdmin = false;
+    $scope.isSuper = false;
     $scope.isUser = false;
     tokenPayload.roles.forEach(function (role) {
         if (role === "Admin") {
@@ -160,6 +162,9 @@ function initializeFromToken($scope, token, jwtHelper) {
         if (role === "User") {
             $scope.isUser = true;
         }
+        if (role === "Super") {
+            $scope.isSuper = true;
+        }
     });
 }
 
@@ -167,6 +172,7 @@ function clearUserDetails($scope) {
     $scope.username = "";
     $scope.isAuthenticated = false;
     $scope.isAdmin = false;
+    $scope.isSuper = false;
     $scope.isUser = false;
 }
 

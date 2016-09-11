@@ -20,9 +20,20 @@ public class NotAuthorizedExceptionMapper implements ExceptionMapper<NotAuthoriz
 
   @Override
   public Response toResponse(NotAuthorizedException ex) {
-
     boolean isDebug = context.getInitParameter("debug").toLowerCase().equals("true");
     ErrorMessage err = new ErrorMessage(ex, ex.getResponse().getStatus(), isDebug);
+    try{
+      //Note: This system kind of "misuses" the NotAuthorizedException as a general autentication exception. So challenges does not contain a challenge
+      //But the message to display. Some new Exception classes should probably be introduces
+      String msg2 = ex.getMessage();
+      System.out.println("XXXXXXXXX"+msg2);
+      String msg = ex.getChallenges().get(0).toString();
+      err.setMessage(msg);
+    }
+    catch(Exception e){
+      System.out.println("UPS");
+      //Do nothing. If null pointer exception just use defaults
+    }
     err.setDescription("You could either not be authenticated, or are not authorized to perform this request");
     
     return Response.status(ex.getResponse().getStatus())

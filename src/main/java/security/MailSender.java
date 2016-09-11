@@ -50,8 +50,9 @@ public class MailSender {
         message.setFrom(new InternetAddress(mailUser));
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
         message.setSubject("Pasword Reset");
-        message.setContent(String.format("<p>Hi %1s. Here is a temporary password you can use to login:  %2s</p> "
-                + "<p>It's only valid for 15. minuttes, so login, and change your password</p>", userName, tempPassword), "text/html; charset=utf-8");
+        message.setContent(String.format("<p>Hi <b>%1s</b>. Here is a temporary password you can use to login:  %2s</p> "+
+                "<p>Use this password to login, go to 'My Account' and select 'Change Password'. Use this password as your old password, when it's requested </p>"
+                + "<p>It's only valid for 15. minuttes, so login, and change your password now</p>", userName, tempPassword), "text/html; charset=utf-8");
         System.out.println("Sending message....");
         Transport.send(message);
 

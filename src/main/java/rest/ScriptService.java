@@ -25,7 +25,7 @@ import scripthandling.ScriptBuilder;
  * @author plaul1
  */
 @Path("script")
-@RolesAllowed("Admin") 
+@RolesAllowed("Super") 
 public class ScriptService {
 static String msg = "Hello";
     @Context

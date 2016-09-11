@@ -226,7 +226,7 @@ public class StudyPointUserFacade implements Serializable {
      
       return roles;
     } catch (NoResultException ex) {
-      throw new NotAuthorizedException("Invalid user name or password", ex);
+      throw new NotAuthorizedException("Invalid user name or password");
     } finally {
       em.close();
     }

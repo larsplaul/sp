@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,11 +30,23 @@ public class UserRole implements Serializable {
   @Id
   private String roleName ;
 
+  public UserRole(String roleName) {
+    this.roleName = roleName;
+  }
+
+  public UserRole() {
+  }
+  
+  
+
   public List<StudyPointUser> getStudyPointUsers() {
     return studyPointUsers;
   }
   
   public void addStudyPointUser(StudyPointUser user){
+    if(studyPointUsers == null){
+      studyPointUsers = new ArrayList();
+    }
     studyPointUsers.add(user);
   }
 

@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-	 version="3.1">
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <session-config>
         <session-timeout>
             30
@@ -11,14 +7,12 @@
     </session-config>
     <context-param>
         <param-name>debug</param-name>
-        <param-value>true</param-value>
+        <param-value>false</param-value>
     </context-param>
-    
     <context-param>
         <param-name>makeTestUser</param-name>
-        <param-value>true</param-value>
+        <param-value>false</param-value>
     </context-param>
-   
     <context-param>
         <param-name>mailServer</param-name>
         <param-value>studypointcphbusiness@gmail.com</param-value>
@@ -35,8 +29,7 @@
         <param-name>tempPasswordTimeoutMinutes</param-name>
         <param-value>15</param-value>
     </context-param>
-    
-<!--    <security-constraint>
+    <!--    <security-constraint>
         <display-name>Constraint1</display-name>
         <web-resource-collection>
             <web-resource-name>All Pages</web-resource-name>
@@ -48,4 +41,16 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>-->
+    <security-constraint>
+        <display-name>SSL</display-name>
+        <web-resource-collection>
+            <web-resource-name>SSL on All</web-resource-name>
+            <description/>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <description>SSL on everything</description>
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
 </web-app>

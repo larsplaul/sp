@@ -11,11 +11,12 @@ delete from SP_CLASS where id != "xxx";
 
 insert into USER_ROLE values('Admin');
 insert into USER_ROLE values('User');
+insert into USER_ROLE values('Super');
 insert into USER_ROLE values('StudentAdmin');
 
 
 -- insert into STUDYPOINT_USER(id,username,firstname,lastname,email,phone,password,passwordinitial) values (NULL,'lam','Lars','Mortensen','lam@cphbusiness.dk','12345678','larsx1234','larsx12234');
 -- insert into STUDYPOINT_USER(id,username,firstname,lastname,email,phone,password,passwordinitial) values (NULL,'tha','Thomas','Hartmann','tha@cphbusiness.dk','----','thomasx1234','thomasx12234');
 -- 
--- insert into STUDYPOINTUSER_ROLES(roleName, userName) values('Admin','lam');
--- insert into STUDYPOINTUSER_ROLES(roleName, userName) values('Admin','tha');
+-- insert into STUDYPOINTUSER_ROLES(roleName, userName) values('Super','lam');
+-- insert into STUDYPOINTUSER_ROLES(roleName, userName) values('Super','tha');

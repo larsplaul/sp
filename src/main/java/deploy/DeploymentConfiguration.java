@@ -37,19 +37,24 @@ public class DeploymentConfiguration implements ServletContextListener {
 
         boolean makeTestUser = context.getInitParameter("makeTestUser").toLowerCase().equals("true");
         if (makeTestUser) {
+          System.out.println("Making Test Usr: lam");
             EntityManagerFactory emf = Persistence.createEntityManagerFactory(DeploymentConfiguration.PU_NAME);
             EntityManager em = emf.createEntityManager();
             try {
-
+                UserRole student = new UserRole("User");
+                UserRole admin = new UserRole("Admin");
                 StudyPointUser user = new StudyPointUser("lam", "lars", "mortensen", "lam@cphbusiness.dk", "");
                 user.setPasswordInitial("");
                 try {
                     user.setPassword("test");
-                    UserRole role = em.find(UserRole.class, "Admin");
-                    role.addStudyPointUser(user);
-                    user.addRole(role);
-                    em.getTransaction().begin();
+                    em.persist(admin);
                     em.persist(user);
+                    //UserRole role = em.find(UserRole.class, "Admin");
+                    admin.addStudyPointUser(user);
+                    user.addRole(admin);
+                    em.getTransaction().begin();
+                    em.persist(student);
+                    
                     em.getTransaction().commit();
                 } catch (Exception ex) {
                     Logger.getLogger(DeploymentConfiguration.class.getName()).log(Level.SEVERE, null, ex);

@@ -206,9 +206,13 @@ public class ScriptBuilder {
                     String[] periodInfo = line.split(";");
                     String classID = periodInfo[0];
                     theClass = em.find(SP_Class.class, classID);
+                    if (periodInfo.length != 3) {
+                        throw new ScriptException("Second line (following a '#PeriodInfo#' must contain a valid class-id,, a header and a description");
+                    }
                     if (theClass == null) {
                         throw new NonexistentEntityException(String.format("Class '%s' not found", classID));
                     }
+                    
                     String periodName = periodInfo[1];
                     String periodDes = periodInfo[2];
                     period = makePeriod(theClass, periodName, periodDes, em);
@@ -233,7 +237,15 @@ public class ScriptBuilder {
             //em.flush();
             em.getTransaction().commit();
             em.getEntityManagerFactory().getCache().evictAll();
-        } finally {
+        } 
+        catch(Exception e){
+       
+          if(em != null){
+            em.getTransaction().rollback();
+          }
+          throw e;
+        }
+        finally {
             em.close();
         }
     }

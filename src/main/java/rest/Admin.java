@@ -124,6 +124,7 @@ public class Admin {
             .build();
   }
   
+  @RolesAllowed("Super") 
   @Path("addEditUser")
   @POST
   @Produces("application/json")
@@ -141,6 +142,7 @@ public class Admin {
             .build();
   }
   
+  @RolesAllowed("Super") 
   @Path("addEditUser")
   @PUT
   @Produces("application/json")
@@ -175,7 +177,7 @@ public class Admin {
             .build();
   }
   
-  
+  @RolesAllowed("Super") 
   @Path("deleteUser/{userId}")
   @DELETE
   @Produces("application/json")
@@ -193,6 +195,7 @@ public class Admin {
             .build();
   }
   
+  @RolesAllowed("Super") 
   @Path("removeFromClass")
   @PUT
   @Produces("application/json")

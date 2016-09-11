@@ -6,6 +6,7 @@ import javax.crypto.SecretKeyFactory;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import javax.ws.rs.NotAuthorizedException;
 import javax.xml.bind.DatatypeConverter;
 
 public class PasswordStorage
@@ -84,6 +85,9 @@ public class PasswordStorage
     public static boolean verifyPassword(char[] password, String correctHash)
         throws CannotPerformOperationException, InvalidHashException
     {
+      if(correctHash == null){
+        throw new NotAuthorizedException("Invalid password");
+      }
         // Decode the hash into its parameters
         String[] params = correctHash.split(":");
         if (params.length != HASH_SECTIONS) {

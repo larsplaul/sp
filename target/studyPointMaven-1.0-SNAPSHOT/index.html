@@ -35,11 +35,11 @@
               <li ng-class="{ active: isActive('/view1')}"><a  id="home" href="#/view1">Home</a></li>
               <li ng-class="{ active: isActive('/news')}"><a  id="news" href="#/news" ng-hide="isAdmin" >News</a></li>
               <li ng-class="{ active: isActive('/view_studentDetail')}"><a href="#/view_studentDetail" ng-cloak ng-show="isUser" >My Study-points</a></li>
-              <li ng-class="{ active: isActive('/view_admin_home')}"><a href="#/view_admin_home" ng-cloak ng-show="isAdmin">Users</a></li>
+              <li ng-class="{ active: isActive('/view_admin_home')}"><a href="#/view_admin_home" ng-cloak ng-show="isSuper">Users</a></li>
               <li ng-class="{ active: isActive('/view_admin_studypoints')}"><a href="#/view_admin_studypoints" ng-cloak ng-show="isAdmin" >Study Points</a></li>
               <li ng-class="{ active: isActive('/view_admin_classInfo')}"><a href="#/view_admin_classInfo" ng-cloak ng-show="isAdmin" >Info for Class</a></li>
-              <li ng-class="{ active: isActive('/view_admin_editClass')}"><a href="#/view_admin_editClass" ng-cloak ng-show="isAdmin" >Edit Class</a></li>
-              <li ng-class="{ active: isActive('/view_admin_script')}"><a href="#/view_admin_script" ng-cloak ng-show="isAdmin" >Script Handling</a></li>
+              <li ng-class="{ active: isActive('/view_admin_editClass')}"><a href="#/view_admin_editClass" ng-cloak ng-show="isSuper" >Edit Class</a></li>
+              <li ng-class="{ active: isActive('/view_admin_script')}"><a href="#/view_admin_script" ng-cloak ng-show="isSuper" >Script Handling</a></li>
               <li ng-class="{ active: isActive('/view_admin_delphi')}"><a href="#/view_admin_delphi" ng-cloak ng-show="isAdmin" >Delphi Evaluation</a></li>
             </ul>
             <form class="navbar-form navbar-right" role="form" ng-cloak ng-show="!isAuthenticated" ng-submit="login()">
