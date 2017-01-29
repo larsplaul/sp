@@ -56,10 +56,22 @@ app.filter("filterTasks", function () {
       return null;
     }
     var foundItemArray = [];
-    for (var i = 0; i < info.tasks.length; i++) {
-      if (info.tasks[i].name == info.filterText) {
-        foundItemArray.push(list[i]);
-        break;
+    if (!info.likeMatch) {
+      for (var i = 0; i < info.tasks.length; i++) {
+        if (info.tasks[i].name == info.filterText) {
+          foundItemArray.push(list[i]);
+          break;
+        }
+      }
+    } else {
+      for (var i = 0; i < info.tasks.length; i++) {
+        if (info.tasks[i].name.indexOf(info.filterText) >= 0) {
+          var name = info.tasks[i].name;
+          var found = (info.tasks[i].name.indexOf(info.filterText)) >= 0;
+          console.log(name + ", " + found);
+          foundItemArray.push(list[i]);
+          // break;
+        }
       }
     }
     var returnval = foundItemArray.length == 0 ? list : foundItemArray;
@@ -73,6 +85,7 @@ app.controller('AdminStudyPointCtrl', function ($scope, $http, $modal, $location
   $scope.saving = false;
   $scope.predicate = 'fullName';
   $scope.filteredTasks = "";
+  $scope.likeMatch = false;
   $scope.safeStatus = null; //Bind information represententing safe status (from server)
 
   //$http.get("adminApi/class")
@@ -141,8 +154,7 @@ app.controller('AdminStudyPointCtrl', function ($scope, $http, $modal, $location
         }
         getPeriod(id);
       });
-    }
-    else {
+    } else {
       getPeriod(id);
     }
   }
@@ -168,8 +180,8 @@ app.controller('AdminStudyPointCtrl', function ($scope, $http, $modal, $location
 
   $scope.savePeriod = function () {
     var scores = [];
-    
-    
+
+
     $scope.period.students.forEach(function (student) {
       student.scores.forEach(function (score) {
         scores.push({id: score.id, score: score.score});

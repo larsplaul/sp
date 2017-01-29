@@ -4,6 +4,8 @@ package rest;
 import entity.exceptions.NonexistentEntityException;
 import entity.exceptions.PreexistingEntityException;
 import facade.JsonAssembler;
+import facade.LogFacade;
+import facade.LogMessage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.security.RolesAllowed;
@@ -19,6 +21,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import security.PasswordStorage;
 
 @Path("admin")
@@ -27,6 +30,8 @@ public class Admin {
 
   @Context
   private UriInfo context;
+  @Context
+  SecurityContext securityContext;
   
   private final JsonAssembler jsonAssembler;
  
@@ -63,8 +68,7 @@ public class Admin {
   @GET
   @Produces("application/json")
   public Response getClassesFullInfo(@PathParam("id") String id) {
-    System.out.println(context.getAbsolutePath());
-    return Response
+     return Response
             .status(200)
             .header("Access-Control-Allow-Origin", "*")
             .entity(jsonAssembler.getFullClassInfo(id))
@@ -131,6 +135,10 @@ public class Admin {
   @Consumes("application/json")
   public Response makeNewUser(String data) throws PreexistingEntityException{
     String result = jsonAssembler.makeUser(data);
+    
+    String user = securityContext.getUserPrincipal().getName();
+    LogFacade.addLogEntry(user, LogMessage.newUser,result);
+    
     return Response
             .status(200)
 //            .header("Access-Control-Allow-Origin", "*")
@@ -149,6 +157,9 @@ public class Admin {
   @Consumes("application/json")
   public Response editUser(String data) throws PreexistingEntityException, NonexistentEntityException{
     String result = jsonAssembler.editUser(data,null);
+    String user = securityContext.getUserPrincipal().getName();
+    LogFacade.addLogEntry(user, LogMessage.editUser,result);
+       
     return Response
             .status(200)
 //            .header("Access-Control-Allow-Origin", "*")
@@ -184,6 +195,10 @@ public class Admin {
   @Consumes("application/json")
   public Response deleteUser(@PathParam("userId") int id){
     String result = jsonAssembler.deleteUser(id);
+    
+    String user = securityContext.getUserPrincipal().getName();
+    LogFacade.addLogEntry(user, LogMessage.deleteUser,result);
+    
     return Response
             .status(200)
 //            .header("Access-Control-Allow-Origin", "*")
@@ -201,8 +216,7 @@ public class Admin {
   @Produces("application/json")
   @Consumes("application/json")
   public Response removeStudentsFromClass(String data){
-      System.out.println("Remove From Class");
-      jsonAssembler.removeStudentsFromClass(data);
+    jsonAssembler.removeStudentsFromClass(data);
     return Response
             .status(200)
 //            .header("Access-Control-Allow-Origin", "*")
@@ -219,6 +233,10 @@ public class Admin {
   @Consumes("application/json")
   public Response editPeriodJson(String scoresAsJson){
     jsonAssembler.editStudyPoints(scoresAsJson);
+    
+    String user = securityContext.getUserPrincipal().getName();
+    LogFacade.addLogEntry(user, LogMessage.editPeriodJson);
+    
     return Response
             .status(200)
             .header("Access-Control-Allow-Origin", "*")

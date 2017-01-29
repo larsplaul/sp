@@ -14,9 +14,8 @@ insert into USER_ROLE values('User');
 insert into USER_ROLE values('Super');
 insert into USER_ROLE values('StudentAdmin');
 
-
--- insert into STUDYPOINT_USER(id,username,firstname,lastname,email,phone,password,passwordinitial) values (NULL,'lam','Lars','Mortensen','lam@cphbusiness.dk','12345678','larsx1234','larsx12234');
--- insert into STUDYPOINT_USER(id,username,firstname,lastname,email,phone,password,passwordinitial) values (NULL,'tha','Thomas','Hartmann','tha@cphbusiness.dk','----','thomasx1234','thomasx12234');
+--insert into STUDYPOINT_USER(id,username,firstname,lastname,email,phone,password,passwordinitial) values (NULL,'lam','Lars','Mortensen','lam@cphbusiness.dk','12345678','sha1:64000:18:d1YpXqCGRhXj584uPVTGCte3E0bMkNF3:/iApAlE4NvD6b2kFpQzCv4TS','');
+-- insert into STUDYPOINT_USER(id,username,firstname,lastname,email,phone,password,passwordinitial) values (NULL,'tha','Thomas','Hartmann','tha@cphbusiness.dk','----','sha1:64000:18:KSmHzGJwHmmOHZUFCAM069DskYDK1Law:2fmfYSKKzxsilALO3oGx0yJr','');
 -- 
 -- insert into STUDYPOINTUSER_ROLES(roleName, userName) values('Super','lam');
 -- insert into STUDYPOINTUSER_ROLES(roleName, userName) values('Super','tha');

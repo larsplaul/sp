@@ -8,6 +8,7 @@ rest\errorhandling\PreExistentEntityExceptionMapper.class
 entity\deploy\UserRole_.class
 entity\deploy\SP_Class_.class
 entity\StudyPointUser.class
+facade\LogMessage.class
 facade\StudyPointUserFacade.class
 entity\exceptions\PreexistingEntityException.class
 rest\errorhandling\SecurityExceptionMapper.class
@@ -52,15 +53,19 @@ security\PasswordStorage$InvalidHashException.class
 security\MailSender$1.class
 facade\StudyPointFacade.class
 entity\development\Task_.class
+entity\deploy\Log_Info_.class
 rest\errorhandling\ErrorMessage.class
 entity\TaskJpaController.class
 security\RolesAllowedFilter.class
 security\FronterLogin.class
+entity\development\Log_Info_.class
 entity\Task.class
 entity\exceptions\IllegalOrphanException.class
 security\PasswordStorage.class
 security\User.class
 security\PasswordStorage$CannotPerformOperationException.class
 security\TempPasswordGenerator.class
+entity\Log_Info.class
 entity\exceptions\ScriptException.class
+facade\LogFacade.class
 security\JWTAuthenticationFilter$1.class

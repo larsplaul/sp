@@ -249,8 +249,8 @@ public class JsonAssembler {
         for (JsonElement s : scores) {
             int id = s.getAsJsonObject().get("id").getAsInt();
             int score = s.getAsJsonObject().get("score").getAsInt();
-            System.out.println(s.getAsJsonObject().get("score").getAsInt());
-            System.out.println("" + id + ", " + score);
+            //System.out.println(s.getAsJsonObject().get("score").getAsInt());
+            //System.out.println("" + id + ", " + score);
             try {
                 studyPointFacade.edit(id, score);
             } catch (Exception ex) {
@@ -459,7 +459,6 @@ public class JsonAssembler {
                 user = em.find(StudyPointUser.class, id);
             }
             boolean isAdmin = user.getRoles().get(0).getRoleName().equals("Admin");
-            System.out.println("Is Admin: " + isAdmin);
             if (userPrincipal != null && !isAdmin) {
                 if (!user.getFirstName().equals(fName) || !user.getLastName().equals(lName)) {
                     throw new SecurityException("You are not authorized to change name values");

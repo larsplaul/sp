@@ -12,6 +12,7 @@ C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\entity\exceptions\Scri
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\rest\ApplicationConfig.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\security\Secrets.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\facade\StudyPointFacade.java
+C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\facade\LogFacade.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\rest\errorhandling\NotAuthorizedExceptionMapper.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\facade\ClassFacade.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\entity\exceptions\PreexistingEntityException.java
@@ -28,9 +29,10 @@ C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\entity\StudyPointUser.
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\entity\SP_Class.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\security\RolesAllowedFilter.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\entity\SemesterPeriod.java
-C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\entity\TaskJpaController.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\security\ResetPasswordService.java
+C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\entity\TaskJpaController.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\entity\SP_ClassJpaController.java
+C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\entity\Log_Info.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\security\JWTAuthenticationFilter.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\security\PasswordStorage.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\entity\Task.java
@@ -44,6 +46,7 @@ C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\security\User.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\facade\StudyPointUserFacade.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\rest\errorhandling\AuthenticationExceptionMapper.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\rest\errorhandling\ConstraintValidationExceptionMapper.java
+C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\facade\LogMessage.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\rest\Login.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\rest\errorhandling\SecurityExceptionMapper.java
 C:\Users\plaul1\Dropbox\FAG\studyPointMaven\src\main\java\rest\errorhandling\NonexistentEntityExceptionMapper.java

@@ -48,9 +48,5 @@
             <description/>
             <url-pattern>/*</url-pattern>
         </web-resource-collection>
-        <user-data-constraint>
-            <description>SSL on everything</description>
-            <transport-guarantee>NONE</transport-guarantee>
-        </user-data-constraint>
     </security-constraint>
 </web-app>

@@ -8,6 +8,8 @@ package rest;
 import entity.exceptions.NonexistentEntityException;
 import entity.exceptions.PreexistingEntityException;
 import facade.JsonAssembler;
+import facade.LogFacade;
+import facade.LogMessage;
 import javax.annotation.security.RolesAllowed;
 import javax.naming.AuthenticationException;
 import javax.ws.rs.GET;
@@ -53,6 +55,7 @@ public class AllRoles {
   @Path("/changePassword")
   public String changePassword(String passwordInfo) throws PreexistingEntityException, NonexistentEntityException, PasswordStorage.CannotPerformOperationException, PasswordStorage.InvalidHashException, AuthenticationException {
      String user = securityContext.getUserPrincipal().getName();
+     LogFacade.addLogEntry(user, LogMessage.changePassword);
      return jsonAssembler.editPassword(passwordInfo, user);        
   }
   

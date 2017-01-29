@@ -1,6 +1,8 @@
 package rest;
 
 import facade.JsonAssembler;
+import facade.LogFacade;
+import facade.LogMessage;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -47,6 +49,7 @@ public class Student {
   @Produces("application/json")
   public Response studypointsForStudentClass(@PathParam("classId") String classId){
     String user = securityContext.getUserPrincipal().getName();
+    LogFacade.addLogEntry(user, LogMessage.userGotPoints);
     return Response
             .status(200)
             .header("Access-Control-Allow-Origin", "*")

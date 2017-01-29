@@ -11,6 +11,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import deploy.DeploymentConfiguration;
+import facade.LogFacade;
 import facade.StudyPointUserFacade;
 import java.security.SecureRandom;
 import java.util.Date;
@@ -28,6 +29,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import security.PasswordStorage;
 import security.Secrets;
+import facade.LogMessage;
 
 @Path("login")
 public class Login {
@@ -39,7 +41,7 @@ public class Login {
     JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
     String username = json.get("username").getAsString();
     String password = json.get("password").getAsString();
-    boolean useFronter = json.get("useFronter").getAsBoolean();
+   // boolean useFronter = json.get("useFronter").getAsBoolean();
     JsonObject responseJson = new JsonObject();
     //String role;  
     List<String> roles;
@@ -48,6 +50,7 @@ public class Login {
         String token = createToken(username, "lam@cphbusieness.dk", roles);
         responseJson.addProperty("username", username);
         responseJson.addProperty("token", token);
+        LogFacade.addLogEntry(username, LogMessage.okLogin);
         return Response.ok(new Gson().toJson(responseJson)).header("Access-Control-Allow-Origin", "*").build();
       }
     } catch (PasswordStorage.CannotPerformOperationException | PasswordStorage.InvalidHashException ex) {

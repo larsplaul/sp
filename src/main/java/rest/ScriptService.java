@@ -8,6 +8,8 @@ package rest;
 import entity.exceptions.NonexistentEntityException;
 import entity.exceptions.PreexistingEntityException;
 import entity.exceptions.ScriptException;
+import facade.LogFacade;
+import facade.LogMessage;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -17,6 +19,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 import scripthandling.ScriptBuilder;
 
 /**
@@ -25,37 +28,43 @@ import scripthandling.ScriptBuilder;
  * @author plaul1
  */
 @Path("script")
-@RolesAllowed("Super") 
+@RolesAllowed("Super")
 public class ScriptService {
-static String msg = "Hello";
-    @Context
-    private UriInfo context;
 
-    /**
-     * Creates a new instance of ScriptService
-     */
-    public ScriptService() {
-    }
+  static String msg = "Hello";
+  @Context
+  private UriInfo context;
+  
+  @Context
+  SecurityContext securityContext;
 
-    /**
-     * Retrieves representation of an instance of rest.ScriptService
-     * @return an instance of java.lang.String
-     */
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getText() {
-        //TODO return proper representation object
-        return msg;
-    }
+  /**
+   * Creates a new instance of ScriptService
+   */
+  public ScriptService() {
+  }
 
-      @POST
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    public String scriptService(String content) throws NonexistentEntityException, ScriptException, PreexistingEntityException {
-        msg = content;
-        ScriptBuilder.createFromScript(content);
-        return "{\"status\": \"Script executed\"}";
-    }
-    
-    
+  /**
+   * Retrieves representation of an instance of rest.ScriptService
+   *
+   * @return an instance of java.lang.String
+   */
+  @GET
+  @Produces(MediaType.TEXT_PLAIN)
+  public String getText() {
+    //TODO return proper representation object
+    return msg;
+  }
+
+  @POST
+  @Consumes(MediaType.TEXT_PLAIN)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String scriptService(String content) throws NonexistentEntityException, ScriptException, PreexistingEntityException {
+    msg = content;
+    String user = securityContext.getUserPrincipal().getName();
+    LogFacade.addLogEntry(user, LogMessage.executedScript, content);
+    ScriptBuilder.createFromScript(content);
+    return "{\"status\": \"Script executed\"}";
+  }
+
 }

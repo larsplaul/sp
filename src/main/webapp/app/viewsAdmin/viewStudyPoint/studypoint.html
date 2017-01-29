@@ -62,8 +62,12 @@
   <div collapse="!period" style="width: 100%;max-height: 70vh; overflow: auto"> <!-vh Vertical Height -->
     <div class="row">
       <div class="col-md-5" style="font-size: large; align-content: center">{{period.periodName}}, {{period.periodDescription}}</div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <input type="search" ng-model="filteredTasks" class="form-control input-sm" style="width: 20em;" placeholder="Select task">
+      </div>
+      <div class="col-md-2">
+        <label for="like" style="margin-right: 4px;color: darkgray">Like Match</label>  
+        <input style="margin-top: 5px;" type="checkbox" id="like" ng-model="likeMatch"> 
       </div>
     </div>
     <form  name="studyPointForm"  style="max-width: 40%;">
@@ -86,7 +90,7 @@
             </a>
           </div>
           </th>
-          <th ng-repeat="task in period.tasks| filterTasks:{tasks: period.tasks, filterText: filteredTasks,header: true}">
+          <th ng-repeat="task in period.tasks| filterTasks:{tasks: period.tasks, filterText: filteredTasks,header: true,likeMatch: likeMatch}">
             {{task.name}} <span style="font-size: xx-small;color: #5f9ea0">(max:{{task.maxScore}})</span>
           </th>
           </tr>
@@ -96,7 +100,7 @@
             <tr ng-repeat="student in period.students| orderBy:predicate:reverse">
               <th><a href="#/viewAdmin_studentDetail/{{student.userId}}/{{student.fullName}}">{{student.fullName}}</a></th>
               <th style="color: #5f9ea0">{{student| sumOfAllPoints | orderBy:sumOfAllPoints:reverse}}</th>
-              <th ng-repeat="s in student.scores| filterTasks:{tasks: period.tasks, filterText: filteredTasks,header: false}">
+              <th ng-repeat="s in student.scores| filterTasks:{tasks: period.tasks, filterText: filteredTasks,header: false,likeMatch: likeMatch}">
                 <input type="number" min="0" max="{{s.maxScore}}"
                        style="width: 3em;border:1px solid lightgray; border-radius: 2px;"
                        ng-model="s.score"
