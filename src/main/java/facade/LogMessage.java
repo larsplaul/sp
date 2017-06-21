@@ -12,6 +12,7 @@ package facade;
 public class LogMessage {
   public static String okLogin = "SUCCESFULL LOGIN";
   public static String changePassword = "CHANGED PW";
+  public static String newPWViaMail = "GOT MAIL WITH TEMP PW";
   public static String userGotPoints = "USER GOT POINTS ";
   public static String newUser = "MADE NEW USER";
   public static String editUser = "EDITED USER";

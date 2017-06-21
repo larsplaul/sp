@@ -10,6 +10,8 @@ import com.google.gson.JsonParser;
 import deploy.DeploymentConfiguration;
 import entity.StudyPointUser;
 import entity.exceptions.NonexistentEntityException;
+import facade.LogFacade;
+import facade.LogMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.ws.rs.core.Context;
@@ -54,6 +56,7 @@ public class ResetPasswordService {
       em.getTransaction().commit();
       System.out.println("Sending mail");
       MailSender.sendMail(user.getEmail(), user.getUserName(), tempPassword);
+      LogFacade.addLogEntry(user.getUserName(), LogMessage.newPWViaMail);
       System.out.println("Sent mail");
       return Response.status(200)
             .entity("{\"status\":"+"\"OK\""+"}")
