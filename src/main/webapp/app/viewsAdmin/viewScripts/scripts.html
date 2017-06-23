@@ -7,7 +7,7 @@
         <div class="col-md-2">
             <button ng-click="sendScript()" class="btn-success btn" ng-disabled="script == null || script ==''">Submit Script</button>
         </div>
-        <div class="col-md-2">{{status}}</div>
+
     </div>   
     <br/>
     <form role="form">
@@ -18,5 +18,5 @@
     </div>
         
   </form>
-    
+            <div>Last Error: {{status}}</div>
 </div>

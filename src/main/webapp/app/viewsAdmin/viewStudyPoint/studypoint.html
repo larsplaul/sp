@@ -31,10 +31,26 @@
     </div>
   </script>
 
+
+  <script type="text/ng-template" id="showCode.html">
+    <div class="modal-header">
+    <h3 class="modal-title">Code for registering attendance</h3>
+    </div>
+    <div class="modal-body" style="height: 20em;">
+    <div style="font-size: 96px;font-weight:bold;color:darkgreen;text-align:center">
+     <br/>
+     {{code}}
+    </div>
+    </div>
+    <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="saveChanges()">Close</button>
+    </div>
+  </script>
+
   <div class="form-group" >
     <div style="max-width: 25em;">
       <select ng-model="selectedId"
-              ng-options="class._id as class.nameShort + ' (' + class._id+')' for class in classes"
+              ng-options="class._id as class.nameShort +  ' (' +  class._id + ')' for class in classes"
               ng-change="getClass(selectedId)" id="class" class="form-control">
         <option value='' disabled selected style='display:none;'>Select class</option>
       </select>
@@ -62,6 +78,7 @@
   <div collapse="!period" style="width: 100%;max-height: 70vh; overflow: auto"> <!-vh Vertical Height -->
     <div class="row">
       <div class="col-md-5" style="font-size: large; align-content: center">{{period.periodName}}, {{period.periodDescription}}</div>
+
       <div class="col-md-3">
         <input type="search" ng-model="filteredTasks" class="form-control input-sm" style="width: 20em;" placeholder="Select task">
       </div>
@@ -70,30 +87,35 @@
         <input style="margin-top: 5px;" type="checkbox" id="like" ng-model="likeMatch"> 
       </div>
     </div>
+
     <form  name="studyPointForm"  style="max-width: 40%;">
       <div >
         <table class="table" style="font-size: smaller" fixed-header>
           <thead>
             <tr>
               <th>
-          <div style="width: 12em;display: inline-block">Student
-            <a href="" ng-click="predicate = 'fullName';
-                  reverse = !reverse"><span class="glyphicon glyphicon-sort"
-                    aria-hidden="true"></span></a>
-          </div>
-          </th>
-          <th>
-          <div style="width: 4em;display: inline-block">Sum
-            <a ng-click="predicate = 'sumOfAllPoints';
-                  reverse = !reverse">
-              <span class="glyphicon glyphicon-sort" aria-hidden="true"></span>
-            </a>
-          </div>
-          </th>
-          <th ng-repeat="task in period.tasks| filterTasks:{tasks: period.tasks, filterText: filteredTasks,header: true,likeMatch: likeMatch}">
-            {{task.name}} <span style="font-size: xx-small;color: #5f9ea0">(max:{{task.maxScore}})</span>
-          </th>
-          </tr>
+                <div style="width: 12em;display: inline-block">Student
+                  <a href="" ng-click="predicate = 'fullName';
+                    reverse = !reverse"><span class="glyphicon glyphicon-sort"
+                          aria-hidden="true"></span></a>
+                </div>
+              </th>
+              <th>
+                <div style="width: 4em;display: inline-block">Sum
+                  <a ng-click="predicate = 'sumOfAllPoints';
+                    reverse = !reverse">
+                    <span class="glyphicon glyphicon-sort" aria-hidden="true"></span>
+                  </a>
+                </div>
+              </th>
+              <th ng-repeat="task in period.tasks| filterTasks:{tasks: period.tasks, filterText: filteredTasks,header: true,likeMatch: likeMatch}">
+               <a ng-if='task.id' href="" ng-click="getCode(task.id)"> {{task.name}}</a>
+               <span ng-if='!task.id'>{{task.name}}</span>
+                
+
+                <span style="font-size: xx-small;color: #5f9ea0">(max:{{task.maxScore}})</span>
+              </th>
+            </tr>
           </thead>
           <tbody>
             <!--<tr ng-repeat="student in period.students">-->

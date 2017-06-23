@@ -178,6 +178,29 @@ app.controller('AdminStudyPointCtrl', function ($scope, $http, $modal, $location
             });
   }
 
+  $scope.getCode = function (id) {
+    console.log("Getting code for : " + id);
+
+    $http.get("api/admin/attendancecode/" + id)
+            .success(function (data, status, headers, config) {
+              $scope.period = null;
+              $modal.open({
+                templateUrl: 'showCode.html',
+                controller: 'showCodeCtrl',
+                resolve: {
+                  code: function () {
+                    return data.code;
+                  }
+                },
+                backdrop: "static",
+                size: "lg"
+              });
+            })
+            .error(function (data, status, headers, config) {
+              restErrorHandler.handleErrors(data, status, $scope);
+            });
+  };
+
   $scope.savePeriod = function () {
     var scores = [];
 
@@ -217,6 +240,18 @@ app.controller('DirtyFormCtrl', function ($scope, $modalInstance) {
 
   $scope.saveChanges = function () {
     $modalInstance.close("save_changes");
+  };
+  $scope.continueAndDrop = function () {
+    $modalInstance.close("drop_changes");
+  };
+});
+
+app.controller('showCodeCtrl', function ($scope, $modalInstance, code) {
+
+  $scope.code = code;
+  $modalInstance.close();
+  $scope.saveChanges = function () {
+    $modalInstance.close();
   };
   $scope.continueAndDrop = function () {
     $modalInstance.close("drop_changes");

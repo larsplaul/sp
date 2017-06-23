@@ -3,6 +3,7 @@ package rest;
 
 import entity.exceptions.NonexistentEntityException;
 import entity.exceptions.PreexistingEntityException;
+import entity.exceptions.StudyPointException;
 import facade.JsonAssembler;
 import facade.LogFacade;
 import facade.LogMessage;
@@ -226,6 +227,17 @@ public class Admin {
 //            .header("Access-Control-Max-Age", "1209600")
             .build();
   }
+  
+  @Path("attendancecode/{taskid}")
+  @GET
+  @Produces("application/json")
+  public Response getAttendanceCode(@PathParam("taskid") int taskid) throws NonexistentEntityException, StudyPointException{
+    return Response
+            .status(200)
+            .entity(jsonAssembler.getAutoLoginCode(taskid))
+            .build();
+  }
+  
   
   @Path("scores")
   @PUT

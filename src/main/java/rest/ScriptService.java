@@ -21,6 +21,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import scripthandling.ScriptBuilder;
+import scripthandling.ScriptHandler;
 
 /**
  * REST Web Service
@@ -46,7 +47,6 @@ public class ScriptService {
 
   /**
    * Retrieves representation of an instance of rest.ScriptService
-   *
    * @return an instance of java.lang.String
    */
   @GET
@@ -63,7 +63,9 @@ public class ScriptService {
     msg = content;
     String user = securityContext.getUserPrincipal().getName();
     LogFacade.addLogEntry(user, LogMessage.executedScript, content);
-    ScriptBuilder.createFromScript(content);
+    //new ScriptBuilder().createFromScript(content);
+    ScriptHandler.MakeScriptHandler(content).executeScript();
+    
     return "{\"status\": \"Script executed\"}";
   }
 

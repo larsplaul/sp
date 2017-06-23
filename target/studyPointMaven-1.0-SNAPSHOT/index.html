@@ -41,6 +41,16 @@
               <li ng-class="{ active: isActive('/view_admin_editClass')}"><a href="#/view_admin_editClass" ng-cloak ng-show="isSuper" >Edit Class</a></li>
               <li ng-class="{ active: isActive('/view_admin_script')}"><a href="#/view_admin_script" ng-cloak ng-show="isSuper" >Script Handling</a></li>
               <li ng-class="{ active: isActive('/view_admin_delphi')}"><a href="#/view_admin_delphi" ng-cloak ng-show="isAdmin" >Delphi Evaluation</a></li>
+              <li>  <div class="dropdown navbar-text">
+                <div  data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                   Utils
+                  <span class="caret"></span>
+                </div>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                  <li><a href="#/view_admin_delphi" ng-show="isAdmin">Delphi Evaluation</a></li>
+                  <li><a href="#/view_admin_utils" ng-cloak >Check Class Name</a></li>
+                </ul>
+              </div></li>
             </ul>
             <form class="navbar-form navbar-right" role="form" ng-cloak ng-show="!isAuthenticated" ng-submit="login()">
               <img src="images/spinnerSmalle.gif" ng-show="showLogonSpinner">
@@ -176,6 +186,7 @@
     <script src="app/viewsAdmin/viewClassInfo/classInfo.js"></script>
     <script src="app/viewsAdmin/viewScripts/scripts.js"></script>
     <script src="app/viewsAdmin/viewDelphi/delphi.js"></script>
+    <script src="app/viewsAdmin/viewUtils/utils.js"></script>
     <script src="app/viewsAll/viewUsersDetails.js"></script>
     <script src="app/components/controllers.js"></script>
     <script src="app/components/auth.js"></script>

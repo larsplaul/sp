@@ -6,9 +6,11 @@
 package facade;
 
 import deploy.DeploymentConfiguration;
+import entity.SP_Class;
 import entity.StudyPoint;
 import entity.StudyPointUser;
 import entity.exceptions.NonexistentEntityException;
+import entity.exceptions.StudyPointException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -30,11 +32,18 @@ import security.PasswordStorage;
  * @author plaul1
  */
 public class StudyPointUserFacade implements Serializable {
-
-  public StudyPointUserFacade(EntityManagerFactory emf) {
-    this.emf = emf;
+  
+  //Refactor to only have one way to get the emf;
+  static EntityManagerFactory emf = Persistence.createEntityManagerFactory(DeploymentConfiguration.PU_NAME);
+  
+  public StudyPointUserFacade(EntityManagerFactory emfac) {
+    emf = emfac;
   }
-  private EntityManagerFactory emf = null;
+
+  public StudyPointUserFacade() {
+  }
+  
+  
 
   public EntityManager getEntityManager() {
     return emf.createEntityManager();
@@ -192,7 +201,33 @@ public class StudyPointUserFacade implements Serializable {
       em.close();
     }
   }
-
+  
+  public  StudyPointUser getUserFromUserNameIfInClass(String userName, String classId) throws StudyPointException {
+    EntityManager em = getEntityManager();
+    try {
+      StudyPointUser user;
+      Query query = em.createNamedQuery("StudyPointUser.findByUsername", StudyPointUser.class);
+      query.setParameter("username", userName);
+      try{
+       user = (StudyPointUser)query.getSingleResult();
+      } catch (Exception e){
+        throw new StudyPointException("User :"+userName+" Not found");
+      }
+      //Figure out how to do this with an "in" clause above
+      boolean isUserInTheClass = false;
+      for(SP_Class aClass: user.getClasses()){
+        if(aClass.getId().equals(classId)){
+          isUserInTheClass = true;
+        }
+      }
+      if(!isUserInTheClass){
+        throw new StudyPointException(String.format("User (%s) is not a member of the class '%s'",userName,classId));
+      }
+      return user;
+    } finally {
+      em.close();
+    }
+  }
 //  public StudyPointUser findUser(String userName) {
 //    EntityManager em = getEntityManager();
 //    try {

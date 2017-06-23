@@ -23,6 +23,7 @@ angular.module('myAppRename', [
   'myAppRename.admin.classInfo',
   'myAppRename.admin.scripts',
   'myAppRename.admin.delphi',
+  'myAppRename.admin.utils',
   'myAppRename.viewUsersDetails',
   //'myAppRename.admin.gridDemo',
   'angularjs-dropdown-multiselect'

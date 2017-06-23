@@ -56,14 +56,14 @@ public class StudyPointFacade implements Serializable {
       em = getEntityManager();
       em.getTransaction().begin();
       studyPoint = em.find(StudyPoint.class, id);
-      if(studyPoint == null){
-         throw new NonexistentEntityException("The studyPoint with id " + id + " no longer exists.");
+      if (studyPoint == null) {
+        throw new NonexistentEntityException("The studyPoint with id " + id + " no longer exists.");
       }
       studyPoint.setScore(score);
       studyPoint = em.merge(studyPoint);
       em.getTransaction().commit();
     } catch (Exception ex) {
-        throw ex;
+      throw ex;
     } finally {
       if (em != null) {
         em.close();
@@ -71,6 +71,30 @@ public class StudyPointFacade implements Serializable {
     }
     return studyPoint;
   }
+
+  //TODO --> I think this is a VERY expensive method, refactor to use JOINS
+  /*
+    Caller must provide the EntityManager, and OPEN and CLOSE (Commit) the transaction
+  */
+  public static void setStudyPoint(EntityManager em, int newScore, String userName, String taskName, String periodName, String classId) {
+    
+    String queryString = "Select s from StudyPoint s "
+            + "where s.studyPointUser.userName = :username "
+            + "and (s.task.name = :taskname) "
+            + "and (s.task.semesterPeriod.periodName = :periodname) "
+            + "and (s.task.semesterPeriod.inClass.id = :classid)";
+      
+      Query query = em.createQuery(queryString);
+      query.setParameter("username", userName);
+      query.setParameter("taskname", taskName);
+      query.setParameter("periodname", periodName);
+      query.setParameter("classid", classId);
+     
+      StudyPoint sp = (StudyPoint)query.getSingleResult();
+      sp.setScore(newScore);
+      em.merge(sp);
+  }
+  
 
   public void destroy(Integer id) throws NonexistentEntityException {
     EntityManager em = null;
@@ -143,5 +167,5 @@ public class StudyPointFacade implements Serializable {
       em.close();
     }
   }
-  
+
 }

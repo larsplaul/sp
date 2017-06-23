@@ -11,7 +11,7 @@
     </context-param>
     <context-param>
         <param-name>makeTestUser</param-name>
-        <param-value>false</param-value>
+        <param-value>true</param-value>
     </context-param>
     <context-param>
         <param-name>mailServer</param-name>
@@ -29,6 +29,10 @@
         <param-name>tempPasswordTimeoutMinutes</param-name>
         <param-value>15</param-value>
     </context-param>
+    <context-param>
+        <param-name>autoAttendaceCodeTimeOutMinutes</param-name>
+        <param-value>120</param-value>
+    </context-param>
     <!--    <security-constraint>
         <display-name>Constraint1</display-name>
         <web-resource-collection>
@@ -41,12 +45,17 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>-->
-    <security-constraint>
+    
+<!--    <security-constraint>
         <display-name>SSL</display-name>
         <web-resource-collection>
             <web-resource-name>SSL on All</web-resource-name>
             <description/>
             <url-pattern>/*</url-pattern>
         </web-resource-collection>
-    </security-constraint>
+        <user-data-constraint>
+            <description/>
+            <transport-guarantee>INTEGRAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>-->
 </web-app>

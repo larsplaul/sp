@@ -18,7 +18,6 @@ public class ClassFacade implements Serializable {
 
   public ClassFacade(EntityManagerFactory emf) {
     this.emf = emf;
-    
   }
   private EntityManagerFactory emf = null;
 

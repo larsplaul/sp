@@ -19,4 +19,6 @@ public class LogMessage {
   public static String deleteUser = "DELETED USER";
   public static String editPeriodJson = "EDIT PERIOD JSON";
   public static String executedScript = "EXECUTED SCRIPT";
+  public static String registeredAttendance = "USER_ATTENDANCE_REGISTRATION";
+  public static String registerAttendanceFailded = "USER_ATTENENDANCE_FAILED";
 }

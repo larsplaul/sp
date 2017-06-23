@@ -39,12 +39,17 @@
               <th>Task</th>
               <th>Score</th>
               <th>Max</th>
+              <th>Register</th>
             </tr>
             </thead>
             <tr ng-repeat="task in period.tasks">
               <td>{{period.tasks[$index].name}}</td>
               <td>{{task.score}}</td>
               <td>{{task.maxScore}}</td>
+              <td ng-if='task.taskId && task.score==0'><input type='text' id="inp{{task.taskId}}" placeholder="Write code" style='width:6em;'/>
+                <button ng-click='registerAttendance(task.taskId,task.spId)'>Register</button>
+              </td>
+              <td ng-if='!task.taskId || task.score>0'>&nbsp;</td>
             </tr>
             <!--<tr class="info">-->
               <!--<td>Total for period</td>-->

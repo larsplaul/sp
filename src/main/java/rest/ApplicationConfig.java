@@ -46,6 +46,7 @@ public class ApplicationConfig extends Application {
     resources.add(rest.errorhandling.PreExistentEntityExceptionMapper.class);
     resources.add(rest.errorhandling.ScriptExceptionMapper.class);
     resources.add(rest.errorhandling.SecurityExceptionMapper.class);
+    resources.add(rest.errorhandling.StudyPointExceptionHandler.class);
     resources.add(security.JWTAuthenticationFilter.class);
     resources.add(security.ResetPasswordService.class);
     resources.add(security.RolesAllowedFilter.class);
