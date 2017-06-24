@@ -12,22 +12,22 @@ import java.util.Arrays;
 import java.util.Scanner;
 import javax.persistence.EntityManager;
 
-
 enum SkipFirstState {
   CAN_BE_SET,
   IS_SET,
   IS_NO_LONGER_VALID
 }
+
 /**
  *
  * @author plaul1
  */
 public class AssignPointsStrategy extends ScriptHandler {
-  
+
   public static final String SKIP_FIRST = "_SKIPFIRST_";
-  
-  protected AssignPointsStrategy(String script){
-    super(script);
+
+  protected AssignPointsStrategy(String script, String separator) {
+    super(script,separator);
   }
 
   @Override
@@ -42,15 +42,15 @@ public class AssignPointsStrategy extends ScriptHandler {
     try {
       while (scan.hasNext()) {
         String line = getNextLine(scan);
-        if(isLineToSkip(line)){
+        if (isLineToSkip(line)) {
           continue;
         }
         //Handle second line
         if (expectClassAndPeriod) {
           expectClassAndPeriod = false;
-          String[] items = line.split(";");
+          String[] items = line.split(SEPARATOR);
           if (items.length != 2) {
-            System.out.println("LINE WAS: "+line);
+            System.out.println("LINE WAS: " + line);
             throw new Exception(makeError("Exactly two entries must follow the Script type (Class ; Period)"));
           }
           classId = items[0].trim();
@@ -85,7 +85,7 @@ public class AssignPointsStrategy extends ScriptHandler {
           }
           continue;
         }
-        String[] items = line.split(";");
+        String[] items = line.split(SEPARATOR);
         if (skipFirst == SkipFirstState.IS_SET) {
           if (items.length < 4 || items.length % 2 != 0) {
             throw new Exception(makeError("Line must start with a studentName (will be skipped), studentId, followed by (minumum) one task name followed by the points to assign for the task"));
@@ -118,7 +118,10 @@ public class AssignPointsStrategy extends ScriptHandler {
           } catch (NumberFormatException ne) {
             throw new Exception(makeError(String.format("%s is not a number (studypoint score)", rest[i + 1])));
           } catch (Exception ex) {
-            String name = t != null ? t.name: "-?-";
+            if (ex instanceof StudyPointException) {
+              throw new StudyPointException(makeError(ex.getMessage()));
+            }
+            String name = t != null ? t.name : "-?-";
             throw new Exception(makeError(String.format("Could not set stydypoints for task '%s', for user '%s'", name, userName)));
           }
         }
@@ -129,6 +132,7 @@ public class AssignPointsStrategy extends ScriptHandler {
         em.getTransaction().rollback();
         em.close();
       }
+     
       throw new ScriptException(ex.getMessage());
     }
     if (em != null) {

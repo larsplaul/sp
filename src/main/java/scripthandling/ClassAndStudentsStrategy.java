@@ -25,8 +25,8 @@ public class ClassAndStudentsStrategy extends ScriptHandler {
   public static final String FRIENDLY_TAG = "_friendlyname_";
   public static final String MAX_POINTS = "_maxpoints_required_";
 
-  protected ClassAndStudentsStrategy(String script) {
-    super(script);
+  protected ClassAndStudentsStrategy(String script,String separator) {
+    super(script,separator);
   }
 
   @Override
@@ -43,8 +43,10 @@ public class ClassAndStudentsStrategy extends ScriptHandler {
       //Remember first line is already read
       if (expectsSecondLine) {
         expectsSecondLine = false;
-        String[] secondLineParts = line.split(";");
+        String[] secondLineParts = line.split(SEPARATOR);
+        System.out.println("Separator: "+SEPARATOR.equals("\t")+"---"+secondLineParts.length );
         if (secondLineParts.length != 2) {
+          
           String msg = String.format("Second entry must include (only) the tag %s + its value (separated by a semicolon)", FRIENDLY_TAG);
           throw new ScriptException(makeError(msg));
         }
@@ -55,7 +57,7 @@ public class ClassAndStudentsStrategy extends ScriptHandler {
         continue;
       }
       if (!expectsSecondLine) { //Read third line
-        String[] thirdLineParts = line.split(";");
+        String[] thirdLineParts = line.split(SEPARATOR);
         if (thirdLineParts.length != 3) {
           String msg = String.format("Third entry must include the tag '%s' followed by maxPoints and required points (separated by semicolons)", MAX_POINTS);
           throw new ScriptException(makeError(msg));
@@ -93,7 +95,7 @@ public class ClassAndStudentsStrategy extends ScriptHandler {
         continue;
       }
     
-      String[] sd = line.split(";");
+      String[] sd = line.split(SEPARATOR);
       //To make code easier to understand;
       String userName = sd[1];
       String fName= sd[6];

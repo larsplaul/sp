@@ -1,5 +1,6 @@
 package entity;
 
+import entity.exceptions.StudyPointException;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -51,7 +52,10 @@ public class StudyPoint implements Serializable {
     return score;
   }
 
-  public void setScore(int score) {
+  public void setScore(int score) throws StudyPointException {
+    if(score > this.task.getMaxScore()){
+      throw new StudyPointException("Atempt to set a studpoint value above max alowed value");
+    }
     this.score = score;
   }
 

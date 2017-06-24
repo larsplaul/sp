@@ -19,8 +19,8 @@ public class PeriodInfoStrategy extends ScriptHandler {
   public static final String TASKS = "_Tasks_";
   public static final String AUTO_ASSIGN = "_A_";
 
-  protected PeriodInfoStrategy(String script) {
-    super(script);
+  protected PeriodInfoStrategy(String script, String separator) {
+    super(script,separator);
   }
   
   public SemesterPeriod makePeriod(SP_Class theClass, String name, String description, EntityManager em) throws ScriptException {
@@ -77,7 +77,7 @@ public class PeriodInfoStrategy extends ScriptHandler {
           continue;
         }
         if (period == null) {
-          String[] periodInfo = line.split(";");
+          String[] periodInfo = line.split(SEPARATOR);
           String classID = periodInfo[0];
           theClass = em.find(SP_Class.class, classID);
           if (periodInfo.length != 3) {
@@ -102,7 +102,7 @@ public class PeriodInfoStrategy extends ScriptHandler {
           taskTagFound = true;
         } else {
 
-          String[] td = line.split(";");
+          String[] td = line.split(SEPARATOR);
           if (td.length != 2) {
             throw new ScriptException(makeError("Only two entries allowed (exactly one semicolon)"));
           }

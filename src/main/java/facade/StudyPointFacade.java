@@ -2,6 +2,7 @@ package facade;
 
 import entity.*;
 import entity.exceptions.NonexistentEntityException;
+import entity.exceptions.StudyPointException;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -76,7 +77,7 @@ public class StudyPointFacade implements Serializable {
   /*
     Caller must provide the EntityManager, and OPEN and CLOSE (Commit) the transaction
   */
-  public static void setStudyPoint(EntityManager em, int newScore, String userName, String taskName, String periodName, String classId) {
+  public static void setStudyPoint(EntityManager em, int newScore, String userName, String taskName, String periodName, String classId) throws StudyPointException {
     
     String queryString = "Select s from StudyPoint s "
             + "where s.studyPointUser.userName = :username "

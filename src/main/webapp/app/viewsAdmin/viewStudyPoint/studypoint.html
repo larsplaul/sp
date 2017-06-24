@@ -109,10 +109,12 @@
                 </div>
               </th>
               <th ng-repeat="task in period.tasks| filterTasks:{tasks: period.tasks, filterText: filteredTasks,header: true,likeMatch: likeMatch}">
-               <a ng-if='task.id' href="" ng-click="getCode(task.id)"> {{task.name}}</a>
-               <span ng-if='!task.id'>{{task.name}}</span>
-                
-
+               
+                <div style="text-align: center;"><a ng-if='task.id' href="" ng-click="getCode(task.id)" > 
+                      <span class="glyphicon glyphicon-text-background"></span></a>
+                </div>
+               <span >{{task.name}}</span>
+               
                 <span style="font-size: xx-small;color: #5f9ea0">(max:{{task.maxScore}})</span>
               </th>
             </tr>

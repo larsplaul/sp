@@ -27,7 +27,8 @@ app.factory("classStore", function () {
   return obj;
 });
 
-app.controller('classInfoCtrl', ['$scope', '$http', 'classStore','restErrorHandler', function ($scope, $http, classStore,restErrorHandler) {
+app.controller('classInfoCtrl', ['$scope', '$http', '$modal','$filter','classStore','restErrorHandler', 
+                                function ($scope, $http,$modal, $filter, classStore,restErrorHandler) {
 
     //REST-1
     $scope.getClasses = function () {
@@ -40,6 +41,9 @@ app.controller('classInfoCtrl', ['$scope', '$http', 'classStore','restErrorHandl
         });
       };
     };
+    
+    $scope.separator = "semicolon";
+    
     //REST-2
     $scope.getClass = function (classId) {
       $scope.showSpinner = true;
@@ -69,6 +73,37 @@ app.controller('classInfoCtrl', ['$scope', '$http', 'classStore','restErrorHandl
     $scope.order = function (pred) {
       $scope.predicate = pred;
       $scope.reverse = !$scope.reverse;
+    };
+
+    $scope.getCommaSeparated = function(){
+      var names = "Studypoints for class: "+$scope.selectedClass._id +"\n";
+      names += "Available points: "+$scope.selectedClass.points.maxPointForSemester+", required: " +$scope.selectedClass.points.requiredPoints+ "%\n";
+      names += "---------------------------------------------------------------\n";
+      var sep;
+      switch($scope.separator){
+        case "semicolon": sep = ";" ;break;
+        case "comma": sep = "," ;break;
+        case "tab": sep = "\t" ;break;
+      }
+      names += "STUDENT ID"+sep+" NAME"+sep+"  POINTS\n";
+      var students = $filter("orderBy")($scope.selectedClass.points.Students,$scope.predicate,$scope.reverse);
+      students.forEach(function(student){
+        names += student.user+sep+student.name+sep+student.points+"\n";
+      });
+      
+      $modal.open({
+                templateUrl: 'showForExport.html',
+                controller: 'exportClassCtrl',
+                resolve: {
+                  textToExport: function () {
+                    return names;
+                  }
+                },
+                backdrop: "static",
+                size: "lg"
+              });
+      
+      
     };
 
     $scope.selectClass = function (classObj) {
@@ -121,3 +156,16 @@ app.controller('classInfoCtrl', ['$scope', '$http', 'classStore','restErrorHandl
       $scope.periodTitle = $scope.selectedPeriod.periodName + ' (' + $scope.selectedPeriod.periodDescription + ')';
     };
   }]);
+
+
+app.controller('exportClassCtrl', function ($scope, $modalInstance, textToExport) {
+
+  $scope.textToExport = textToExport;
+  $modalInstance.close();
+  $scope.saveChanges = function () {
+    $modalInstance.close();
+  };
+//  $scope.continueAndDrop = function () {
+//    $modalInstance.close("drop_changes");
+//  };
+});

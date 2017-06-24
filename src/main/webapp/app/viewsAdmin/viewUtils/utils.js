@@ -24,6 +24,12 @@ function getDescription(id) {
   const danishWinter = "qrst";
   const internationalSummer = "uvx";
   const internationalWinter = "yz";
+  
+  //This is a guess, not in the description on intranet
+  if(id==="p"){
+    return "Internship";
+  }
+  
   if (danishSummer.indexOf(id) > -1) {
     return "Danish class started as a summer clas";
   }
@@ -44,15 +50,18 @@ app.controller('ctrl', function ($scope) {
 
   $scope.decode = function () {
     var skipStartYear = false;
-    var className;
+       
+    $scope.classToDecode = $scope.classToDecode.replace("CPH-","");
+    var className = $scope.classToDecode;
+    $scope.warning = "";
     if ($scope.classToDecode.length === 9) {
-      window.alert("According to description, lengtt should be 11. Assumes this is a class without start year: " + $scope.classToDecode.length);
+      $scope.warning= "According to description, length should be 11. Assumed this was a class without start year: ";
       skipStartYear = true;
     } else if ($scope.classToDecode.length !== 11) {
       window.alert("Error: Length should be 11, but is: " + $scope.classToDecode.length);
       return;
     }
-    className = $scope.classToDecode;
+    
     $scope.location = locations[className[0]];
     $scope.year = 2000 + Number(className.substring(1, 3));
     $scope.education = className.substring(3, 6);
