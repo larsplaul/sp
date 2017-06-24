@@ -10,7 +10,7 @@ public class ErrorMessage {
   public ErrorMessage(Throwable ex, int code,boolean debug) {
     this.code = code;
     this.message = ex.getMessage();
-    this.description = ex.getMessage();
+    //this.description = ex.getMessage();
     if(debug){
       StringWriter sw = new StringWriter();
       ex.printStackTrace(new PrintWriter(sw));

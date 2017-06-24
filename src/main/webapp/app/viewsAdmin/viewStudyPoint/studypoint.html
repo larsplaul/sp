@@ -36,21 +36,28 @@
     <div class="modal-header">
     <h3 class="modal-title">Code for registering attendance</h3>
     </div>
-    <div class="modal-body" style="height: 20em;">
+    <div class="modal-body" style="height: 40em;">
     <div style="font-size: 96px;font-weight:bold;color:darkgreen;text-align:center">
      <br/>
-     {{code}}
-    </div>
+     <div>{{code}}</div>
+       </div>
+       <br/>
+       <hr/>
+       <br/>
+     <div style="font-size:28px;color:darkgren;margin:15px; text-allign:left;">
+     Login to: {{url}}, select this class ({{thisclass}}) and period ({{period}}) and enter the <b>code</b> above.
+           </div>  
+    
     </div>
     <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="saveChanges()">Close</button>
+      <button class="btn btn-primary" ng-click="saveChanges()">Close</button>
     </div>
   </script>
 
   <div class="form-group" >
     <div style="max-width: 25em;">
       <select ng-model="selectedId"
-              ng-options="class._id as class.nameShort +  ' (' +  class._id + ')' for class in classes"
+              ng-options="class._id as class.nameShort +    ' (' +    class._id +   ')' for class in classes"
               ng-change="getClass(selectedId)" id="class" class="form-control">
         <option value='' disabled selected style='display:none;'>Select class</option>
       </select>

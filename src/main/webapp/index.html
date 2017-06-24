@@ -18,7 +18,7 @@
   </head>
   <body>
 
-    <div ng-controller="AppLoginCtrl" >
+    <div ng-controller="AppLoginCtrl" ng-style="debugStatus" >
       <nav class="navbar navbar-static-top  navbar-default" role="navigation" >
         <div class="container">
           <div class="navbar-header">
@@ -88,11 +88,12 @@
           </div>
         </div>
       </nav>
-      <div class="container">
+      <div class="container" >
         <div class="alert alert-warning" role="alert" ng-show="error"  ng-cloak style="margin: 1.5em;" >
           <div> {{error.message}} <span>{{error.description}}</span></div>
         </div>
         <div ng-view="ng-view"></div>
+        <div style="color:red;font-weight: bold;margin-top: 0px;">{{debugStatusTxt}}</div>
       </div>
     </div>
 

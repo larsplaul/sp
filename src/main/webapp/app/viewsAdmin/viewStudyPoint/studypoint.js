@@ -183,13 +183,20 @@ app.controller('AdminStudyPointCtrl', function ($scope, $http, $modal, $location
 
     $http.get("api/admin/attendancecode/" + id)
             .success(function (data, status, headers, config) {
+    
+              var thisClass = $scope.period.classId;
+              var period = $scope.period.periodName;
               $scope.period = null;
               $modal.open({
                 templateUrl: 'showCode.html',
                 controller: 'showCodeCtrl',
                 resolve: {
-                  code: function () {
-                    return data.code;
+                  info: function () {
+                    return {
+                      code:data.code,
+                      thisClass: thisClass ,
+                      period: period
+                    };
                   }
                 },
                 backdrop: "static",
@@ -246,9 +253,14 @@ app.controller('DirtyFormCtrl', function ($scope, $modalInstance) {
   };
 });
 
-app.controller('showCodeCtrl', function ($scope, $modalInstance, code) {
+app.controller('showCodeCtrl', function ($scope, $modalInstance, info) {
 
-  $scope.code = code;
+  
+  
+   $scope.code = info.code;
+   $scope.thisclass = info.thisClass;
+  $scope.period = info.period;
+  $scope.url = location.protocol + "//" + location.host+"//"+location.pathname;
   $modalInstance.close();
   $scope.saveChanges = function () {
     $modalInstance.close();

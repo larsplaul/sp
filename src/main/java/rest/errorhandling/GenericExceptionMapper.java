@@ -22,8 +22,13 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
 
     boolean isDebug = context.getInitParameter("debug").toLowerCase().equals("true");
     ErrorMessage err = new ErrorMessage(ex, 500, isDebug);
-    err.setMessage("An unexpected problem occured on the server");
-    err.setDescription("You may report this error to lam@cphbusiness.dk with a description off how the error occured ");
+    //For most unknow exceptions we hide the original text, in order not to expose internal logic
+    // Some messages however, are VERY nice to have for our self
+    if(!(ex instanceof javax.ws.rs.NotAllowedException)){
+      err.setMessage("An unexpected problem occured on the server");
+      err.setDescription("You may report this error to lam@cphbusiness.dk with a description off how the error occured ");
+    }
+    
    
     return Response.status(500)
             .entity("{\"error\":"+gson.toJson(err)+"}")

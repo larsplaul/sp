@@ -92,12 +92,13 @@ public class Login {
 //    String rolesAsString = res.length() > 0 ? res.substring(0, res.length() - 1) : "";
     // String rolesAsString = role;
     // Generate random 256-bit (32-byte) shared secret
-    SecureRandom random = null;
-    if (Secrets.SHARED_SECRET == null) {
-      random = new SecureRandom();
-      Secrets.SHARED_SECRET = new byte[32];
-      random.nextBytes(Secrets.SHARED_SECRET);
-    }
+   // SecureRandom random = null;
+// This has been moved into the deploy folder    
+// if (Secrets.SHARED_SECRET == null) {
+//      random = new SecureRandom();
+//      Secrets.SHARED_SECRET = new byte[32];
+//      random.nextBytes(Secrets.SHARED_SECRET);
+//    }
     JWSSigner signer = new MACSigner(Secrets.SHARED_SECRET);
     Date date = new Date();
     JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()

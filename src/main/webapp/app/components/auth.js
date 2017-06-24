@@ -5,11 +5,21 @@ angular.module('myApp.security', [])
                 $scope.logout();
             });
 
+            $http.get('api/status')
+                        .success(function (data) {
+                            $rootScope.debugStatus = (data.status === "DEBUG")? {'background-color':'white'}:{'background-color':'white'};
+                            $rootScope.debugStatusTxt = data.status === "DEBUG" ? "DEBUG MODE" : "";
+                            console.warn("RUNNING IN DEBUG MODE");
+                        }).error(function (data) {
+                          $rootScope.debugStatus = {'background-color':'yellow'};
+                          console.log("Could not fetch STATUS");
+                        });
+
             $scope.user = {};
-            $scope.user.useFronter = ($window.localStorage.useFronter === "true");
-            $scope.useFronterClicked = function () {
-                $window.localStorage.useFronter = $scope.user.useFronter;
-            };
+//            $scope.user.useFronter = ($window.localStorage.useFronter === "true");
+//            $scope.useFronterClicked = function () {
+//                $window.localStorage.useFronter = $scope.user.useFronter;
+//            };
 
             $scope.$on("NotAuthenticatedEvent", function (event, res) {
                 $scope.$emit("logOutEvent");

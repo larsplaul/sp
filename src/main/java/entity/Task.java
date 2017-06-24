@@ -67,16 +67,16 @@ public class Task implements Serializable {
   }
   
   public boolean hasValidCode(Date now){
-    int MIN = 200;
-    long time = -1;
-    boolean allowed = false;
-    if(codeCreated !=null){
-       time = ((codeCreated.getTime()+60*1000 *CODE_TIMEOUT_MINUTES) -  now.getTime());
-       allowed = ((codeCreated.getTime()+60*1000 *CODE_TIMEOUT_MINUTES) >  now.getTime());
-    }
-    System.out.println("Allow: "+allowAutoAttendance+", code: "+(code!= null)+", Time: "+time+", Allowed: "+allowed);
+//    int MIN = 200;
+//    long time = -1;
+//    boolean allowed = false;
+//    if(codeCreated !=null){
+//       time = ((codeCreated.getTime()+60*1000 *CODE_TIMEOUT_MINUTES) -  now.getTime());
+//       allowed = ((codeCreated.getTime()+60*1000 *CODE_TIMEOUT_MINUTES) >  now.getTime());
+//    }
+//    System.out.println("Allow: "+allowAutoAttendance+", code: "+(code!= null)+", Time: "+time+", Allowed: "+allowed);
     if(allowAutoAttendance && code!= null && ((codeCreated.getTime()+60*1000 *CODE_TIMEOUT_MINUTES) >  now.getTime())) {
-      System.out.println("TRUE");
+      //System.out.println("TRUE");
       return true;
     }
     //Assuming that reason was a timeout for the code
