@@ -7,8 +7,6 @@ import entity.exceptions.StudyPointException;
 import facade.JsonAssembler;
 import facade.LogFacade;
 import facade.LogMessage;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -20,7 +18,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import security.PasswordStorage;
@@ -77,15 +75,6 @@ public class Admin {
   }
   
   
-  
-  
-//  @Path("classFromId/{id}")
-//  @GET
-//  @Produces("application/json")
-//  public String getClassJson(@PathParam("id") String id){
-//    return jsonAssembler.getClass(id);
-//  }
-  
   @Path("classFromId/{id}")
   @GET
   @Produces("application/json")
@@ -125,7 +114,7 @@ public class Admin {
     return Response
             .status(200)
             .header("Access-Control-Allow-Origin", "*")
-            .entity(jsonAssembler.getStudyPointsForStudent(classId, studentId))
+            .entity(jsonAssembler.getStudyPointsForStudent(classId, studentId,false))
             .build();
   }
   
@@ -142,11 +131,6 @@ public class Admin {
     
     return Response
             .status(200)
-//            .header("Access-Control-Allow-Origin", "*")
-//            .header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding")
-//            .header("Access-Control-Allow-Credentials", "true")
-//            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-//            .header("Access-Control-Max-Age", "1209600")
             .entity(result)
             .build();
   }
@@ -163,11 +147,6 @@ public class Admin {
        
     return Response
             .status(200)
-//            .header("Access-Control-Allow-Origin", "*")
-//            .header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding")
-//            .header("Access-Control-Allow-Credentials", "true")
-//            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-//            .header("Access-Control-Max-Age", "1209600")
             .entity(result)
             .build();
   }
@@ -180,11 +159,6 @@ public class Admin {
   public Response changePasswordForUser(@PathParam("id") int id) throws PasswordStorage.CannotPerformOperationException{
     return Response
             .status(200)
-//            .header("Access-Control-Allow-Origin", "*")
-//            .header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding")
-//            .header("Access-Control-Allow-Credentials", "true")
-//            .header("Access-Control-Allow-Methods", "PUT")
-//            .header("Access-Control-Max-Age", "1209600")
             .entity(jsonAssembler.resetPassword(id))
             .build();
   }
@@ -202,11 +176,6 @@ public class Admin {
     
     return Response
             .status(200)
-//            .header("Access-Control-Allow-Origin", "*")
-//            .header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding")
-//            .header("Access-Control-Allow-Credentials", "true")
-//            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-//            .header("Access-Control-Max-Age", "1209600")
             .entity(result)
             .build();
   }
@@ -220,11 +189,6 @@ public class Admin {
     jsonAssembler.removeStudentsFromClass(data);
     return Response
             .status(200)
-//            .header("Access-Control-Allow-Origin", "*")
-//            .header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding")
-//            .header("Access-Control-Allow-Credentials", "true")
-//            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-//            .header("Access-Control-Max-Age", "1209600")
             .build();
   }
   
@@ -232,9 +196,13 @@ public class Admin {
   @GET
   @Produces("application/json")
   public Response getAttendanceCode(@PathParam("taskid") int taskid) throws NonexistentEntityException, StudyPointException{
+     CacheControl cc = new CacheControl();
+     cc.setMaxAge(60); 
+ 
     return Response
             .status(200)
             .entity(jsonAssembler.getAutoLoginCode(taskid))
+            .cacheControl(cc)
             .build();
   }
   

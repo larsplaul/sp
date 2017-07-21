@@ -30,6 +30,7 @@ import javax.ws.rs.core.Response;
 import security.PasswordStorage;
 import security.Secrets;
 import facade.LogMessage;
+import security.AuthenticatedUser;
 
 @Path("login")
 public class Login {
@@ -44,10 +45,11 @@ public class Login {
    // boolean useFronter = json.get("useFronter").getAsBoolean();
     JsonObject responseJson = new JsonObject();
     //String role;  
-    List<String> roles;
+    //List<String> roles;
+    AuthenticatedUser userDetails = null;
     try {
-      if ((roles = authenticate(username, password)) != null) {
-        String token = createToken(username, "lam@cphbusieness.dk", roles);
+      if ((userDetails = authenticate(username, password)) != null) {
+        String token = createToken(username, "lam@cphbusiness.dk", userDetails);
         responseJson.addProperty("username", username);
         responseJson.addProperty("token", token);
         LogFacade.addLogEntry(username, LogMessage.okLogin);
@@ -76,36 +78,23 @@ public class Login {
             .build();
   }
 
-  static List<String> authenticate(String userName, String password) throws PasswordStorage.CannotPerformOperationException, PasswordStorage.InvalidHashException, AuthenticationException {
+  static AuthenticatedUser authenticate(String userName, String password) throws PasswordStorage.CannotPerformOperationException, PasswordStorage.InvalidHashException, AuthenticationException {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory(DeploymentConfiguration.PU_NAME);
     StudyPointUserFacade facade = new StudyPointUserFacade(emf);
     return facade.authenticateUser(userName, password);
   }
 
-  static String createToken(String subject, String issuer, List<String> roles) throws JOSEException {
+  static String createToken(String subject, String issuer, AuthenticatedUser userDetails) throws JOSEException {
 
     StringBuilder res = new StringBuilder();
-//    for (String string : roles) {
-//      res.append(string);
-//      res.append(",");
-//    }
-//    String rolesAsString = res.length() > 0 ? res.substring(0, res.length() - 1) : "";
-    // String rolesAsString = role;
-    // Generate random 256-bit (32-byte) shared secret
-   // SecureRandom random = null;
-// This has been moved into the deploy folder    
-// if (Secrets.SHARED_SECRET == null) {
-//      random = new SecureRandom();
-//      Secrets.SHARED_SECRET = new byte[32];
-//      random.nextBytes(Secrets.SHARED_SECRET);
-//    }
     JWSSigner signer = new MACSigner(Secrets.SHARED_SECRET);
     Date date = new Date();
     JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
             .subject(subject)
             .claim("username", subject)
-            .claim("roles", roles)
-            //            .claim("roles", role)
+            .claim("roles", userDetails.getRoles())
+            .claim("fn", userDetails.getFirstName())
+            .claim("ln", userDetails.getLastName())
             .claim("issuer", issuer)
             .issueTime(date)
             .expirationTime(new Date(date.getTime() + 1000 * 60 * 60))

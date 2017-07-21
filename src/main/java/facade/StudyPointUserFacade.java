@@ -17,6 +17,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.naming.AuthenticationException;
 import javax.persistence.EntityManager;
@@ -24,6 +25,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.ws.rs.NotAuthorizedException;
+import security.AuthenticatedUser;
 import security.FronterLogin;
 import security.PasswordStorage;
 
@@ -32,18 +34,16 @@ import security.PasswordStorage;
  * @author plaul1
  */
 public class StudyPointUserFacade implements Serializable {
-  
+
   //Refactor to only have one way to get the emf;
   static EntityManagerFactory emf = Persistence.createEntityManagerFactory(DeploymentConfiguration.PU_NAME);
-  
+
   public StudyPointUserFacade(EntityManagerFactory emfac) {
     emf = emfac;
   }
 
   public StudyPointUserFacade() {
   }
-  
-  
 
   public EntityManager getEntityManager() {
     return emf.createEntityManager();
@@ -81,82 +81,81 @@ public class StudyPointUserFacade implements Serializable {
     }
   }
 
-  public void edit(StudyPointUser studyPointUser) throws NonexistentEntityException, Exception {
-    EntityManager em = null;
-    try {
-      em = getEntityManager();
-      em.getTransaction().begin();
-      StudyPointUser persistentStudyPointUser = em.find(StudyPointUser.class, studyPointUser.getId());
-      List<StudyPoint> studyPointsOld = persistentStudyPointUser.getStudyPoints();
-      List<StudyPoint> studyPointsNew = studyPointUser.getStudyPoints();
-      List<StudyPoint> attachedStudyPointsNew = new ArrayList<StudyPoint>();
-      for (StudyPoint studyPointsNewStudyPointToAttach : studyPointsNew) {
-        studyPointsNewStudyPointToAttach = em.getReference(studyPointsNewStudyPointToAttach.getClass(), studyPointsNewStudyPointToAttach.getId());
-        attachedStudyPointsNew.add(studyPointsNewStudyPointToAttach);
-      }
-      studyPointsNew = attachedStudyPointsNew;
-      studyPointUser.setStudyPoints(studyPointsNew);
-      studyPointUser = em.merge(studyPointUser);
-      for (StudyPoint studyPointsOldStudyPoint : studyPointsOld) {
-        if (!studyPointsNew.contains(studyPointsOldStudyPoint)) {
-          studyPointsOldStudyPoint.setStudyPointUser(null);
-          studyPointsOldStudyPoint = em.merge(studyPointsOldStudyPoint);
-        }
-      }
-      for (StudyPoint studyPointsNewStudyPoint : studyPointsNew) {
-        if (!studyPointsOld.contains(studyPointsNewStudyPoint)) {
-          StudyPointUser oldStudyPointUserOfStudyPointsNewStudyPoint = studyPointsNewStudyPoint.getStudyPointUser();
-          studyPointsNewStudyPoint.setStudyPointUser(studyPointUser);
-          studyPointsNewStudyPoint = em.merge(studyPointsNewStudyPoint);
-          if (oldStudyPointUserOfStudyPointsNewStudyPoint != null && !oldStudyPointUserOfStudyPointsNewStudyPoint.equals(studyPointUser)) {
-            oldStudyPointUserOfStudyPointsNewStudyPoint.getStudyPoints().remove(studyPointsNewStudyPoint);
-            oldStudyPointUserOfStudyPointsNewStudyPoint = em.merge(oldStudyPointUserOfStudyPointsNewStudyPoint);
-          }
-        }
-      }
-      em.getTransaction().commit();
-    } catch (Exception ex) {
-      String msg = ex.getLocalizedMessage();
-      if (msg == null || msg.length() == 0) {
-        Integer id = studyPointUser.getId();
-        if (findStudyPointUser(id) == null) {
-          throw new NonexistentEntityException("The studyPointUser with id " + id + " no longer exists.");
-        }
-      }
-      throw ex;
-    } finally {
-      if (em != null) {
-        em.close();
-      }
-    }
-  }
-
-  public void destroy(Integer id) throws NonexistentEntityException {
-    EntityManager em = null;
-    try {
-      em = getEntityManager();
-      em.getTransaction().begin();
-      StudyPointUser studyPointUser;
-      try {
-        studyPointUser = em.getReference(StudyPointUser.class, id);
-        studyPointUser.getId();
-      } catch (EntityNotFoundException enfe) {
-        throw new NonexistentEntityException("The studyPointUser with id " + id + " no longer exists.", enfe);
-      }
-      List<StudyPoint> studyPoints = studyPointUser.getStudyPoints();
-      for (StudyPoint studyPointsStudyPoint : studyPoints) {
-        studyPointsStudyPoint.setStudyPointUser(null);
-        studyPointsStudyPoint = em.merge(studyPointsStudyPoint);
-      }
-      em.remove(studyPointUser);
-      em.getTransaction().commit();
-    } finally {
-      if (em != null) {
-        em.close();
-      }
-    }
-  }
-
+//  public void edit(StudyPointUser studyPointUser) throws NonexistentEntityException, Exception {
+//    EntityManager em = null;
+//    try {
+//      em = getEntityManager();
+//      em.getTransaction().begin();
+//      StudyPointUser persistentStudyPointUser = em.find(StudyPointUser.class, studyPointUser.getId());
+//      List<StudyPoint> studyPointsOld = persistentStudyPointUser.getStudyPoints();
+//      List<StudyPoint> studyPointsNew = studyPointUser.getStudyPoints();
+//      List<StudyPoint> attachedStudyPointsNew = new ArrayList<StudyPoint>();
+//      for (StudyPoint studyPointsNewStudyPointToAttach : studyPointsNew) {
+//        studyPointsNewStudyPointToAttach = em.getReference(studyPointsNewStudyPointToAttach.getClass(), studyPointsNewStudyPointToAttach.getId());
+//        attachedStudyPointsNew.add(studyPointsNewStudyPointToAttach);
+//      }
+//      studyPointsNew = attachedStudyPointsNew;
+//      studyPointUser.setStudyPoints(studyPointsNew);
+//      studyPointUser = em.merge(studyPointUser);
+//      for (StudyPoint studyPointsOldStudyPoint : studyPointsOld) {
+//        if (!studyPointsNew.contains(studyPointsOldStudyPoint)) {
+//          studyPointsOldStudyPoint.setStudyPointUser(null);
+//          studyPointsOldStudyPoint = em.merge(studyPointsOldStudyPoint);
+//        }
+//      }
+//      for (StudyPoint studyPointsNewStudyPoint : studyPointsNew) {
+//        if (!studyPointsOld.contains(studyPointsNewStudyPoint)) {
+//          StudyPointUser oldStudyPointUserOfStudyPointsNewStudyPoint = studyPointsNewStudyPoint.getStudyPointUser();
+//          studyPointsNewStudyPoint.setStudyPointUser(studyPointUser);
+//          studyPointsNewStudyPoint = em.merge(studyPointsNewStudyPoint);
+//          if (oldStudyPointUserOfStudyPointsNewStudyPoint != null && !oldStudyPointUserOfStudyPointsNewStudyPoint.equals(studyPointUser)) {
+//            oldStudyPointUserOfStudyPointsNewStudyPoint.getStudyPoints().remove(studyPointsNewStudyPoint);
+//            oldStudyPointUserOfStudyPointsNewStudyPoint = em.merge(oldStudyPointUserOfStudyPointsNewStudyPoint);
+//          }
+//        }
+//      }
+//      em.getTransaction().commit();
+//    } catch (Exception ex) {
+//      String msg = ex.getLocalizedMessage();
+//      if (msg == null || msg.length() == 0) {
+//        Integer id = studyPointUser.getId();
+//        if (findStudyPointUser(id) == null) {
+//          throw new NonexistentEntityException("The studyPointUser with id " + id + " no longer exists.");
+//        }
+//      }
+//      throw ex;
+//    } finally {
+//      if (em != null) {
+//        em.close();
+//      }
+//    }
+//  }
+//
+//  public void destroy(Integer id) throws NonexistentEntityException {
+//    EntityManager em = null;
+//    try {
+//      em = getEntityManager();
+//      em.getTransaction().begin();
+//      StudyPointUser studyPointUser;
+//      try {
+//        studyPointUser = em.getReference(StudyPointUser.class, id);
+//        studyPointUser.getId();
+//      } catch (EntityNotFoundException enfe) {
+//        throw new NonexistentEntityException("The studyPointUser with id " + id + " no longer exists.", enfe);
+//      }
+//      List<StudyPoint> studyPoints = studyPointUser.getStudyPoints();
+//      for (StudyPoint studyPointsStudyPoint : studyPoints) {
+//        studyPointsStudyPoint.setStudyPointUser(null);
+//        studyPointsStudyPoint = em.merge(studyPointsStudyPoint);
+//      }
+//      em.remove(studyPointUser);
+//      em.getTransaction().commit();
+//    } finally {
+//      if (em != null) {
+//        em.close();
+//      }
+//    }
+//  }
   public List<StudyPointUser> findStudyPointUserEntities() {
     return findStudyPointUserEntities(true, -1, -1);
   }
@@ -201,27 +200,27 @@ public class StudyPointUserFacade implements Serializable {
       em.close();
     }
   }
-  
-  public  StudyPointUser getUserFromUserNameIfInClass(String userName, String classId) throws StudyPointException {
+
+  public StudyPointUser getUserFromUserNameIfInClass(String userName, String classId) throws StudyPointException {
     EntityManager em = getEntityManager();
     try {
       StudyPointUser user;
       Query query = em.createNamedQuery("StudyPointUser.findByUsername", StudyPointUser.class);
       query.setParameter("username", userName);
-      try{
-       user = (StudyPointUser)query.getSingleResult();
-      } catch (Exception e){
-        throw new StudyPointException("User :"+userName+" Not found");
+      try {
+        user = (StudyPointUser) query.getSingleResult();
+      } catch (Exception e) {
+        throw new StudyPointException("User :" + userName + " Not found");
       }
       //Figure out how to do this with an "in" clause above
       boolean isUserInTheClass = false;
-      for(SP_Class aClass: user.getClasses()){
-        if(aClass.getId().equals(classId)){
+      for (SP_Class aClass : user.getClasses()) {
+        if (aClass.getId().equals(classId)) {
           isUserInTheClass = true;
         }
       }
-      if(!isUserInTheClass){
-        throw new StudyPointException(String.format("User (%s) is not a member of the class '%s'",userName,classId));
+      if (!isUserInTheClass) {
+        throw new StudyPointException(String.format("User (%s) is not a member of the class '%s'", userName, classId));
       }
       return user;
     } finally {
@@ -243,23 +242,44 @@ public class StudyPointUserFacade implements Serializable {
 //    }
 //  }
 
-  
-  public List<String> authenticateUser(String userName, String password) throws PasswordStorage.CannotPerformOperationException, PasswordStorage.InvalidHashException, AuthenticationException {
+  public List<StudyPoint> getPointsToAutoRegister(String userName) {
     EntityManager em = getEntityManager();
     try {
       Query query = em.createNamedQuery("StudyPointUser.findByUsername", StudyPointUser.class);
       query.setParameter("username", userName);
       StudyPointUser user = (StudyPointUser) query.getSingleResult();
-      if(user == null){
-          throw new NotAuthorizedException("Invalid user name ");
+      if (user == null) {
+        throw new NotAuthorizedException("Invalid user name ");
       }
-      //Alway authenticate locally first
-      //Todo System is hardcode to allow only one role per user
-      //String role = user != null && user.getPassword().equals(password) ? user.getRoles().get(0).getRoleName() : null;
+      List<StudyPoint> pointsToRegister = new ArrayList();
+      Date now = new Date();
+      for(StudyPoint point :user.getStudyPoints()){
+        if(point.getTask().hasValidCode(now) && point.getScore()==0){
+          pointsToRegister.add(point);
+        }
+      }
+      return pointsToRegister;
+    } finally {
+      em.close();
+    }
+  }
+
+  public AuthenticatedUser  authenticateUser(String userName, String password) throws PasswordStorage.CannotPerformOperationException, PasswordStorage.InvalidHashException, AuthenticationException {
+    EntityManager em = getEntityManager();
+    try {
+      Query query = em.createNamedQuery("StudyPointUser.findByUsername", StudyPointUser.class);
+      query.setParameter("username", userName);
+      StudyPointUser user = (StudyPointUser) query.getSingleResult();
+      if (user == null) {
+        throw new NotAuthorizedException("Invalid user name ");
+      }
       boolean passwordOK = security.PasswordStorage.verifyPassword(password, user.getPassword());
-      List<String> roles = passwordOK ? user.getRolesAsStrings(): null;
-     
-      return roles;
+      if(!passwordOK){
+        throw new NotAuthorizedException("Invalid user name or password");
+      }
+      List<String> roles = passwordOK ? user.getRolesAsStrings() : null;
+      AuthenticatedUser userDetails = new AuthenticatedUser(roles, user.getFirstName(), user.getLastName());
+      return userDetails;
     } catch (NoResultException ex) {
       throw new NotAuthorizedException("Invalid user name or password");
     } finally {
@@ -267,19 +287,18 @@ public class StudyPointUserFacade implements Serializable {
     }
   }
 
-  public int getStudyPointUserCount() {
-    EntityManager em = getEntityManager();
-    try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      Root<StudyPointUser> rt = cq.from(StudyPointUser.class);
-      cq.select(em.getCriteriaBuilder().count(rt));
-      Query q = em.createQuery(cq);
-      return ((Long) q.getSingleResult()).intValue();
-    } finally {
-      em.close();
-    }
-  }
-
+//  public int getStudyPointUserCount() {
+//    EntityManager em = getEntityManager();
+//    try {
+//      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+//      Root<StudyPointUser> rt = cq.from(StudyPointUser.class);
+//      cq.select(em.getCriteriaBuilder().count(rt));
+//      Query q = em.createQuery(cq);
+//      return ((Long) q.getSingleResult()).intValue();
+//    } finally {
+//      em.close();
+//    }
+//  }
   public static void main(String[] args) throws AuthenticationException {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory(DeploymentConfiguration.PU_NAME);
     StudyPointUserFacade facade = new StudyPointUserFacade(emf);

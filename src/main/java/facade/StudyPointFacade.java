@@ -1,14 +1,17 @@
 package facade;
 
+import deploy.DeploymentConfiguration;
 import entity.*;
 import entity.exceptions.NonexistentEntityException;
 import entity.exceptions.StudyPointException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
@@ -18,10 +21,55 @@ import javax.persistence.criteria.Root;
  */
 public class StudyPointFacade implements Serializable {
 
-  public StudyPointFacade(EntityManagerFactory emf) {
-    this.emf = emf;
+  static EntityManagerFactory emf = Persistence.createEntityManagerFactory(DeploymentConfiguration.PU_NAME);
+
+  public StudyPointFacade(EntityManagerFactory emfac) {
+    emf = emfac;
   }
-  private EntityManagerFactory emf = null;
+
+  //Uses the static EntityManagerFactory
+  public StudyPointFacade() {}
+  
+  /**
+   * Use this to autoregister points for a studypoint, when the StudyPoint code
+   * is known
+   *
+   * @param studyPointId
+   * @param code
+   * @param user
+   * @throws StudyPointException
+   */
+  public String registerViaCode(int studyPointId, String code, String user, boolean ignoreCode) throws StudyPointException {
+
+    EntityManager em = null;
+    try {
+      em = getEntityManager();
+      StudyPoint studyPoint = em.find(StudyPoint.class, studyPointId);
+      if (studyPoint==null) {
+        throw new StudyPointException("No studypoint found with the provided ID");
+      }
+      if (!studyPoint.getStudyPointUser().getUserName().equals(user)) {
+        throw new StudyPointException("You are not authorized to register for this study point");
+      }
+      String codeToMatch = studyPoint.getTask().getCode();
+      if (codeToMatch == null) {
+        throw new StudyPointException("Points could not be assigned, code was probably timed out");
+      }
+      if (!ignoreCode && !codeToMatch.equals(code)) {
+        throw new StudyPointException("Wrong code");
+      }
+      studyPoint.setScore(studyPoint.getTask().getMaxScore());
+      em.getTransaction().begin();
+      em.merge(studyPoint);
+      em.getTransaction().commit();
+      return studyPoint.getTask().getName();
+    } finally {
+      if (em != null) {
+        em.close();
+      }
+    }
+  }
+   
 
   public EntityManager getEntityManager() {
     return emf.createEntityManager();
@@ -76,26 +124,25 @@ public class StudyPointFacade implements Serializable {
   //TODO --> I think this is a VERY expensive method, refactor to use JOINS
   /*
     Caller must provide the EntityManager, and OPEN and CLOSE (Commit) the transaction
-  */
+   */
   public static void setStudyPoint(EntityManager em, int newScore, String userName, String taskName, String periodName, String classId) throws StudyPointException {
-    
+
     String queryString = "Select s from StudyPoint s "
             + "where s.studyPointUser.userName = :username "
             + "and (s.task.name = :taskname) "
             + "and (s.task.semesterPeriod.periodName = :periodname) "
             + "and (s.task.semesterPeriod.inClass.id = :classid)";
-      
-      Query query = em.createQuery(queryString);
-      query.setParameter("username", userName);
-      query.setParameter("taskname", taskName);
-      query.setParameter("periodname", periodName);
-      query.setParameter("classid", classId);
-     
-      StudyPoint sp = (StudyPoint)query.getSingleResult();
-      sp.setScore(newScore);
-      em.merge(sp);
+
+    Query query = em.createQuery(queryString);
+    query.setParameter("username", userName);
+    query.setParameter("taskname", taskName);
+    query.setParameter("periodname", periodName);
+    query.setParameter("classid", classId);
+
+    StudyPoint sp = (StudyPoint) query.getSingleResult();
+    sp.setScore(newScore);
+    em.merge(sp);
   }
-  
 
   public void destroy(Integer id) throws NonexistentEntityException {
     EntityManager em = null;

@@ -157,7 +157,7 @@ public class JsonAssembler {
     return gson.toJson(classAsJson);
   }
 
-  public String getStudyPointsForStudent(String classId, int studentId) {
+  public String getStudyPointsForStudent(String classId, int studentId,boolean isValidIp) {
     ClassFacade classFacade = new ClassFacade(emf);
     SP_Class c = classFacade.findSP_Class(classId);
     StudyPointUserFacade spFacade = new StudyPointUserFacade(emf);
@@ -181,10 +181,11 @@ public class JsonAssembler {
         jsonTask.addProperty("name", task.getName());
         jsonTask.addProperty("maxScore", task.getMaxScore());
         jsonTask.addProperty("score", task.getStudyPointForStudent(studentId).getScore());
-        jsonTask.addProperty("studyPointId", task.getStudyPointForStudent(studentId).getId());
+        //jsonTask.addProperty("studyPointId", task.getStudyPointForStudent(studentId).getId());
+        jsonTask.addProperty("spId", task.getStudyPointForStudent(studentId).getId());
         if (task.hasValidCode(now)) {
-           jsonTask.addProperty("taskId", task.getId());
-           jsonTask.addProperty("spId", task.getStudyPointForStudent(studentId).getId());
+           jsonTask.addProperty("auto", isValidIp? 1:0); //Value of auto 1: no need to provide code, 0 code must be provided (un-approved IP)
+           //jsonTask.addProperty("spId", task.getStudyPointForStudent(studentId).getId());
         }
         jsonTasks.add(jsonTask);
       }
@@ -697,12 +698,12 @@ public class JsonAssembler {
     }
   }
 
-  public String getStudyPointsForCurrentUser(String classId, String userName) {
+  public String getStudyPointsForCurrentUser(String classId, String userName,boolean isValidIP) {
 
     EntityManager em = getEntityManager();
     try {
       StudyPointUser user = getUserFromUserName(em, userName);
-      return getStudyPointsForStudent(classId, user.getId());
+      return getStudyPointsForStudent(classId, user.getId(),isValidIP);
     } finally {
       em.close();
     }

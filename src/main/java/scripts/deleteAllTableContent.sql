@@ -1,9 +1,17 @@
-delete from studypoint;
-delete from task;
-delete from sp_class_studypoint_user;
-delete from semester_period;
-delete from sp_class;
-delete from studypointuser_roles;
-delete from studypoint_user;
-delete from log_info;
-delete from user_role;
+
+delete from LOG_INFO;
+delete from STUDYPOINT;
+delete from TASK;
+
+delete from SP_CLASS_STUDYPOINT_USER;
+delete from SEMESTER_PERIOD;
+
+delete from STUDYPOINTUSER_ROLES;
+delete from SP_CLASS;
+
+
+delete from STUDYPOINT_USER;
+delete from USER_ROLE;
+
+
+

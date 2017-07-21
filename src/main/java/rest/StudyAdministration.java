@@ -54,7 +54,7 @@ public class StudyAdministration {
     return Response
             .status(200)
             .header("Access-Control-Allow-Origin", "*")
-            .entity(jsonAssembler.getStudyPointsForStudent(classId, studentId))
+            .entity(jsonAssembler.getStudyPointsForStudent(classId, studentId,false))
             .build();
   }
 

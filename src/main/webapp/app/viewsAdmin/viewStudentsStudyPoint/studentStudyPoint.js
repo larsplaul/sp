@@ -5,7 +5,11 @@ var app = angular.module('myAppRename.admin.studyPointsForStudent', ['ngRoute'])
             $routeProvider.when('/viewAdmin_studentDetail/:studentId/:name', {
               templateUrl: 'app/viewsAdmin/viewStudentsStudyPoint/studentStudyPoint.html',
               controller: 'StudentStudyPointCtrlAdmin'
-            });
+            })
+                    .when("/viewAdmin_studentDetail/:studentId/:name/:classId/:periodId", {
+                      templateUrl: 'app/viewsAdmin/viewStudentsStudyPoint/studentStudyPoint.html',
+                      controller: 'StudentStudyPointCtrlAdmin'
+                    });
           }]);
 
 
@@ -30,10 +34,30 @@ app.controller('StudentStudyPointCtrlAdmin', ['$scope', '$http', '$routeParams',
     $scope.max = 100;
     $scope.safeStatus = null;
 
+
+
     $scope.showPeriod = function (periodName) {
       $scope.safeStatus = null;
       $scope.period = getPeriod($scope.allPeriods, periodName);
     };
+
+    var urlForStudentsClasses = "api/admin/classesForStudent/" + $routeParams.studentId;
+    $http.get(urlForStudentsClasses)
+            .success(function (data, status, headers, config) {
+              $scope.classes = data;
+              if($scope.classes.length === 1){//No need to show a select button, just show the class
+               $scope.oneClassOnly = true;
+               $scope.selectedClassId = $scope.classes[0]._id; 
+              }  
+              $scope.allPeriods = null;
+              $scope.period = null;
+              ;
+              $scope.error = null;
+            })
+            .error(function (data, status, headers, config) {
+              restErrorHandler.handleErrors(data, status, $scope);
+            });
+
 
 
     $scope.getClass = function (id, editedPeriod) {
@@ -47,7 +71,8 @@ app.controller('StudentStudyPointCtrlAdmin', ['$scope', '$http', '$routeParams',
                 $scope.requiredPointsPercentage = data.requiredPoints;
                 $scope.reqPointsPercentageString = data.requiredPoints + "%";
                 $scope.requiredPoints = $scope.maxPointForSemester * data.requiredPoints / 100;
-                $scope.period = editedPeriod;
+                //$scope.period = editedPeriod;
+                $scope.showPeriod(editedPeriod);
                 var pointsScoredForPeriod = $filter('sumForSemester')($scope.allPeriods);
                 var pointScoredPercent = pointsScoredForPeriod * 100 / $scope.maxPointForSemester;
                 if (pointScoredPercent < $scope.requiredPointsPercentage) {
@@ -62,20 +87,24 @@ app.controller('StudentStudyPointCtrlAdmin', ['$scope', '$http', '$routeParams',
               });
     };
 
+    if ($routeParams.classId && $routeParams.periodId) {
+      $scope.getClass($routeParams.classId, $routeParams.periodId);
+    }
+
     $scope.savePeriod = function () {
       $scope.period = null;
       var scores = [];
       $scope.allPeriods.forEach(function (p) {
         p.tasks.forEach(function (task) {
-          scores.push({id: task.studyPointId, score: task.score});
+          scores.push({id: task.spId, score: task.score});
         });
       });
       $http.put("api/admin/scores", scores)
-               .success(function (data) {
+              .success(function (data) {
                 $scope.studyPointFormForUser.$dirty = false;
                 $scope.studyPointFormForUser.$setPristine();
-                $scope.safeStatus = "New study points successfully added"; 
-                $scope.getClass($scope.selectedClassId, data);
+                $scope.safeStatus = "New study points successfully added";
+                $scope.getClass($scope.selectedClassId, null);
                 //setTimeout(function(){
                 //  $scope.period = data
                 //},1000);
@@ -86,19 +115,6 @@ app.controller('StudentStudyPointCtrlAdmin', ['$scope', '$http', '$routeParams',
     };
 
 
-//  var urlForStudentsClasses = "adminApi/class/"+$routeParams.studentId ;
-    var urlForStudentsClasses = "api/admin/classesForStudent/" + $routeParams.studentId;
-    $http.get(urlForStudentsClasses)
-            .success(function (data, status, headers, config) {
-              $scope.classes = data;
-              $scope.allPeriods = null;
-              $scope.period = null;
-              ;
-              $scope.error = null;
-            })
-            .error(function (data, status, headers, config) {
-              restErrorHandler.handleErrors(data, status, $scope);
-            });
 
 
     function getPeriod(periods, periodName) {

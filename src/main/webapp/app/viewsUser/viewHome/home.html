@@ -5,9 +5,9 @@
     <!--<label for="class" class="control-label col-md-2" style="font-size: large"><span class="label label-primary">Select Class</span></label>-->
 
     <div style="width: 25%">
-      <select ng-model="selectedId" placeholder="Select Class"
+      <select ng-model="selectedClassId" placeholder="Select Class"
               ng-options="class._id as class.nameShort + ' (' + class._id+')' for class in classes"
-              ng-change="getClass(selectedId)" id="class" class="form-control">
+              ng-change="getClass(selectedClassId)" id="class" class="form-control">
         <option value='' disabled selected style='display:none;'>Select class</option>
       </select>
     </div>
@@ -46,10 +46,18 @@
               <td>{{period.tasks[$index].name}}</td>
               <td>{{task.score}}</td>
               <td>{{task.maxScore}}</td>
-              <td ng-if='task.taskId && task.score==0'><input type='text' id="inp{{task.taskId}}" placeholder="Write code" style='width:6em;'/>
-                <button ng-click='registerAttendance(task.taskId,task.spId)'>Register</button>
+              
+              
+              <td ng-if='task.auto == 0 && task.score==0'>
+                <input type='text' id="inp{{task.spId}}" placeholder="Write code" style='width:6em;'/>
+                <button ng-click='registerAttendance(task.spId,true)'>Register</button>
               </td>
-              <td ng-if='!task.taskId || task.score>0'>&nbsp;</td>
+              
+               <td ng-if='task.auto == 1 && task.score==0'>
+                <button ng-click='registerAttendance(task.spId,false)'>Register</button>
+              </td>
+              
+              <td ng-if='!task.auto || task.score>0'>&nbsp;</td>
             </tr>
             <!--<tr class="info">-->
               <!--<td>Total for period</td>-->

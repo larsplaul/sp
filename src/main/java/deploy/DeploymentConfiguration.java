@@ -3,9 +3,12 @@ package deploy;
 import entity.StudyPointUser;
 import entity.Task;
 import entity.UserRole;
-import static entity.deploy.StudyPointUser_.password;
-import java.security.SecureRandom;
+import java.io.IOException;
+import java.io.InputStream;
+
 import java.util.Map;
+import java.util.Properties;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -17,7 +20,6 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import rest.TestResource;
 import security.MailSender;
-import security.PasswordStorage;
 import security.Secrets;
 
 @WebListener
@@ -26,32 +28,70 @@ public class DeploymentConfiguration implements ServletContextListener {
   public static String PU_NAME = "PU-Local";
 
   @Override
+  @SuppressWarnings("empty-statement")
   public void contextInitialized(ServletContextEvent sce) {
+
+    //Handling init-params from the properties file (secrets that should not be pushed to GIT)
+    InputStream input = null;
+    Properties prop = new Properties();
+    try {
+      input = getClass().getClassLoader().getResourceAsStream("/config.properties");;
+      if (input == null) {
+        System.out.println("Could not load init-properties");
+        return;
+      }
+      prop.load(input);
+
+      String ips = prop.getProperty("ips");
+      if (ips != null) {
+        utils.ValidIps.setValidIps(ips);
+      }
+  
+      System.out.println(String.format("Mail: %1$s, %2$s, %3$s",prop.getProperty("mailServer"), prop.getProperty("mailUser"), prop.getProperty("mailPassword")));
+      MailSender.initConstants(prop.getProperty("mailServer"), prop.getProperty("mailUser"), prop.getProperty("mailPassword"));
+      Secrets.SHARED_SECRET = prop.getProperty("tokenSecret").getBytes();
+      input.close();
+
+    } catch (IOException ex) {
+      Logger.getLogger(DeploymentConfiguration.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    ServletContext context = sce.getServletContext();
     Map<String, String> env = System.getenv();
+    System.out.println("LISTING ALL KEYS");
+    for (String k : env.keySet()) {
+      System.out.println(k);
+    }
+
     //If we are running in the OPENSHIFT environment change the pu-name 
     if (env.keySet().contains("OPENSHIFT_MYSQL_DB_HOST")) {
       PU_NAME = "PU_OPENSHIFT";
     }
 
+
+    /*
+  If we are running on a Digital Ocean Droplet change the pu-name 
+  Important: Remember when installing Tomcat on DO to set this Environment Variable.
+
+  For Tomcat 8 it must be set in the the file: /etc/default/tomcat8 as:
+  IS_ON_DIGITAL_OCEAN=true
+
+  Tomcat DOES NOT READ general Environment Variables, so it must be set in this file 
+     */
+    if (env.keySet().contains("IS_ON_DIGITAL_OCEAN")) {
+      PU_NAME = "PU_DIGITAL_OCEAN";
+    }
+    if (env.keySet().contains("IS_ON_DIGITAL_OCEAN_SP")) {
+      PU_NAME = "PU_DIGITAL_OCEAN_STUDYPOINTS";
+    }
     System.out.println("PU_NAME: " + PU_NAME);
 
-    ServletContext context = sce.getServletContext();
+    //Handling init-params from web.xml
     boolean isDebug = context.getInitParameter("debug").toLowerCase().equals("true");
 
-    if (Secrets.SHARED_SECRET == null) {
-      if (isDebug) {
-        Secrets.SHARED_SECRET = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA".getBytes();
-      } else {
-        SecureRandom random = new SecureRandom();
-        Secrets.SHARED_SECRET = new byte[32];
-        random.nextBytes(Secrets.SHARED_SECRET);
-      }
-    }
-    
+//    MailSender.initConstants(context);
     isDebug = isDebug || context.getInitParameter("makeTestUser").toLowerCase().equals("true");
     TestResource.STATUS = isDebug ? "DEBUG" : "PRODUCTION";
 
-    MailSender.initConstants(context);
     StudyPointUser.tempPasswordTimeoutMinutes = Integer.parseInt(context.getInitParameter("tempPasswordTimeoutMinutes"));
     Task.CODE_TIMEOUT_MINUTES = Integer.parseInt(context.getInitParameter("autoAttendaceCodeTimeOutMinutes"));
 
@@ -93,5 +133,25 @@ public class DeploymentConfiguration implements ServletContextListener {
 
   @Override
   public void contextDestroyed(ServletContextEvent sce) {
+
+    //https://stackoverflow.com/questions/11872316/tomcat-guice-jdbc-memory-leak
+//    Enumeration<Driver> drivers = DriverManager.getDrivers();
+//    Driver d = null;
+//    while (drivers.hasMoreElements()) {
+//      try {
+//        d = drivers.nextElement();
+//        DriverManager.deregisterDriver(d);
+//        Logger.getLogger(DeploymentConfiguration.class.getName()).log(Level.WARNING, String.format("Driver %s deregistered", d));
+//
+//      } catch (SQLException ex) {
+//        Logger.getLogger(DeploymentConfiguration.class.getName()).log(Level.SEVERE, String.format("Error deregistering driver %s", d));
+//
+//      }
+//    }
+//    try {
+//      AbandonedConnectionCleanupThread.shutdown();
+//    } catch (InterruptedException e) {
+//       Logger.getLogger(DeploymentConfiguration.class.getName()).log(Level.SEVERE, "Severe problem while cleaning up");
+//    }
   }
 }

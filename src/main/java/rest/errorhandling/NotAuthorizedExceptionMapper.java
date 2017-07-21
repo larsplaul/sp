@@ -26,7 +26,7 @@ public class NotAuthorizedExceptionMapper implements ExceptionMapper<NotAuthoriz
       //Note: This system kind of "misuses" the NotAuthorizedException as a general autentication exception. So challenges does not contain a challenge
       //But the message to display. Some new Exception classes should probably be introduces
       String msg2 = ex.getMessage();
-      System.out.println("XXXXXXXXX"+msg2);
+      System.out.println(msg2);
       String msg = ex.getChallenges().get(0).toString();
       err.setMessage(msg);
     }

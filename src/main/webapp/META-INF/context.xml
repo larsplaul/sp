@@ -1,2 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/studyPointMaven"/>
+<Context path="/studyPointMaven">
+   <!-- Default set of monitored resources -->
+<!--    <WatchedResource>WEB-INF/web.xml</WatchedResource>-->
+<!-- url="jdbc:mysql://165.227.136.141:3306/studypoints"-->
+ 
+ <!-- Mydemos
+ url="jdbc:mysql://188.166.166.104:3306/studypoints"
+ -->
+    <Resource name="jdbc/POINTS_DB_DIGITAL_OCEAN"
+              url="jdbc:mysql://188.166.166.104:3306/studypoints" 
+              driverClassName="com.mysql.jdbc.Driver"
+              username="spuser"
+              password="tt345ttt"
+              auth="Container"
+              type="javax.sql.DataSource"
+              maxIdle="5"
+              maxTotal="20"
+              maxWaitMillis="10000"
+              />
+    
+    <Resource name="jdbc/STUDYPOINTS"
+              url="jdbc:mysql://165.227.136.141:3306/studypoints" 
+              driverClassName="com.mysql.jdbc.Driver"
+              username="spuser"
+              password="tt345ttt"
+              auth="Container"
+              type="javax.sql.DataSource"
+              maxIdle="5"
+              maxTotal="20"
+              maxWaitMillis="10000"
+              />
+    
+    <Resource name="jdbc/POINTS_DB"
+              url="jdbc:mysql://localhost:3306/point2"
+              driverClassName="com.mysql.jdbc.Driver"
+              username="root"
+              password="test"
+              auth="Container"
+              type="javax.sql.DataSource"
+              maxActive="20"
+              maxIdle="5"
+              maxWait="10000"
+              />
+               
+</Context>

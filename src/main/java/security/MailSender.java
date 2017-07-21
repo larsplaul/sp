@@ -18,10 +18,15 @@ public class MailSender {
   private static String mailUser;
   private static String mailPassword;
 
-  public static void initConstants(ServletContext context) {
-    mailServer = context.getInitParameter("mailServer");
-    mailUser = context.getInitParameter("mailUser");
-    mailPassword = context.getInitParameter("mailPassword");
+//  public static void initConstants(ServletContext context) {
+//    mailServer = context.getInitParameter("mailServer");
+//    mailUser = context.getInitParameter("mailUser");
+//    mailPassword = context.getInitParameter("mailPassword");
+//  }
+  public static void initConstants(String server, String user, String pw) {
+    mailServer = server;
+    mailUser = user;
+    mailPassword = pw;
   }
 
   public static void sendMail(String userEmail, String userName, String tempPassword) {

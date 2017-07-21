@@ -7,13 +7,18 @@
 <div class="alert alert-danger" role="alert" ng-show="error">{{error}}</div>
 <div style="">
   <h3>{{name}}</h3>
-  <div>
+  <div ng-if="!oneClassOnly">
     <div style="max-width: 25em;">
-      <select ng-model="selectedId"
+      <select ng-model="selectedClassId"
               ng-options="class._id as class.nameShort + ' (' + class._id+')' for class in classes"
-              ng-change="getClass(selectedId)" id="class" class="form-control">
+              ng-change="getClass(selectedClassId)" id="class" class="form-control">
         <option value='' disabled selected style='display:none;'>Select class</option>
       </select>
+    </div>
+  </div>
+  <div ng-if="oneClassOnly">
+    <div style="max-width: 25em;">
+      <h4>Class: {{selectedClassId}}</h4>
     </div>
   </div>
 

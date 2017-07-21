@@ -1,17 +1,17 @@
 _class_and_students_
-_friendlyname_;3Q_Spring2017
+_friendlyname_;PROG__3Q_Spring2017
 _maxpoints_required_;240;80
 Activity;Username;Password;Email;SSN;Name;Firstname;Lastname;MobilePhone;StartDate;EndDate;Address;PostalCode;City;PrivateMail
 CPH-l17dat3qf;a;test;cph-an164@cphbusiness.dk;-;Anders Christian Nissen;Anders Christian;Nissen;40500488;22-08-2016;31-01-2017;Sct Olai Gade 20 C,1;3000;Helsingør;anders-nissen@stofanet.dk
 CPH-l17dat3qf;b;http://localhost:8080/studyPointMaven/#/view_admin_studypoints;cph-al217@cphbusiness.dk;-;Asger Thorsboe Lundblad;Asger Thorsboe;Lundblad;50852020;22-08-2016;31-01-2017;Bellisvej 15;2720;Vanløse;regsa13@gmial.com
 CPH-l17dat3qf;c;test;cph-bk110@cphbusiness.dk;-;Bjørn Forsberg Feldt Kristiansen;Bjørn Forsberg Feldt;Kristiansen;31604343;22-08-2016;31-01-2017;Dr Louises Alle 3;3480;Fredensborg;bearukun@gmail.com
 CPH-l17dat3qf;d;test;cph-cr169@cphbusiness.dk;-;Christopher Poul Rosendorf;Christopher Poul;Rosendorf;30313754;22-08-2016;31-01-2017;Kildevældets Alle 10;2600;Glostrup;Chris@Rosendorf.dk
-CPH-l17dat3qf;e;test;cph-dp84@cphbusiness.dk;-;Daniel Andre Pedersen;Daniel Andre;Pedersen;22199881;22-08-2016;31-01-2017;Rosenhøj 41,2 tv;2650;Hvidovre;danielap@sol.dk
-CPH-l17dat3qf;cph-en93;cph44345;cph-en93@cphbusiness.dk;-;Emil Elkjær Nielsen;Emil Elkjær;Nielsen;60146057;22-08-2016;31-01-2017;Åvej 7;2680;Solrød Strand;emil@vta.dk
-CPH-l17dat3qf;cph-er50;cph84566;cph-er50@cphbusiness.dk;-;Emil Malmgaard Rasmussen;Emil Malmgaard;Rasmussen;60727108;22-08-2016;31-01-2017;Morbærhaven 5,-92;2620;Albertslund;heroclass1993@hotmail.com
-CPH-l17dat3qf;cph-hs160;cph68865;cph-hs160@cphbusiness.dk;-;Hannibal Alexander Skriver;Hannibal Alexander;Skriver;42451929;22-08-2016;31-01-2017;Skovbrinken 1;3450;Allerød;hanni.skriver@gmail.com
-CPH-l17dat3qf;cph-ju71;cph32591;cph-ju71@cphbusiness.dk;-;Janus Ingerslev Udsen;Janus Ingerslev;Udsen;30420238;22-08-2016;31-01-2017;Danmarksvej 18 A;2800;Lyngby;janusudsen@yahoo.com
-CPH-l17dat3qf;cph-jr167;cph12925;cph-jr167@cphbusiness.dk;-;Jens Egeberg Rasmussen;Jens Egeberg;Rasmussen;29428569;22-08-2016;31-01-2017;Smøgen 7,2;3480;Fredensborg;coilx14396@hotmail.com
+CPH-l17dat3qf;rap;test;cph-dp84@cphbusiness.dk;-;Donald Duck;Donald;Duck;22199881;22-08-2016;31-01-2017;Rosenhøj 41,2 tv;2650;Hvidovre;danielap@sol.dk
+CPH-l17dat3qf;f;test;cph-en93@cphbusiness.dk;-;Emil Elkjær Nielsen;Emil Elkjær;Nielsen;60146057;22-08-2016;31-01-2017;Åvej 7;2680;Solrød Strand;emil@vta.dk
+CPH-l17dat3qf;g;test;cph-er50@cphbusiness.dk;-;Emil Malmgaard Rasmussen;Emil Malmgaard;Rasmussen;60727108;22-08-2016;31-01-2017;Morbærhaven 5,-92;2620;Albertslund;heroclass1993@hotmail.com
+CPH-l17dat3qf;h;test;cph-hs160@cphbusiness.dk;-;Hannibal Alexander Skriver;Hannibal Alexander;Skriver;42451929;22-08-2016;31-01-2017;Skovbrinken 1;3450;Allerød;hanni.skriver@gmail.com
+CPH-l17dat3qf;i;test;cph-ju71@cphbusiness.dk;-;Janus Ingerslev Udsen;Janus Ingerslev;Udsen;30420238;22-08-2016;31-01-2017;Danmarksvej 18 A;2800;Lyngby;janusudsen@yahoo.com
+CPH-l17dat3qf;quark;cph12925;cph-jr167@cphbusiness.dk;-;Donald Duck;Donald;Duck;29428569;22-08-2016;31-01-2017;Smøgen 7,2;3480;Fredensborg;coilx14396@hotmail.com
 CPH-l17dat3qf;cph-jj305;cph25226;cph-jj305@cphbusiness.dk;-;Jesper Reinhold Outzen;Jesper Reinhold;Outzen;29471474;22-08-2016;31-01-2017;Lystoftevej 20 A,st th;2800;Lyngby;jesper_1300@hotmail.com
 CPH-l17dat3qf;cph-jv80;cph33597;cph-jv80@cphbusiness.dk;-;Joacim Malik Vetterlain;Joacim Malik;Vetterlain;42786242;22-08-2016;31-01-2017;Rørsangervej 91,2 th;2400;København NV;joacim@vetterlain.dk
 CPH-l17dat3qf;cph-jn235;cph21182;cph-jn235@cphbusiness.dk;-;Jonas Schack Nielsen;Jonas Schack;Nielsen;31611299;22-08-2016;31-01-2017;Dronninggårds Alle 1 A,2 th;2840;Holte;jonas.schack.nielsen@gmail.com

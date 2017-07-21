@@ -129,7 +129,8 @@
           <tbody>
             <!--<tr ng-repeat="student in period.students">-->
             <tr ng-repeat="student in period.students| orderBy:predicate:reverse">
-              <th><a href="#/viewAdmin_studentDetail/{{student.userId}}/{{student.fullName}}">{{student.fullName}}</a></th>
+<!--              <th><a href="#/viewAdmin_studentDetail/{{student.userId}}/{{student.fullName}}">{{student.fullName}}</a></th>-->
+              <th><a href="#/viewAdmin_studentDetail/{{student.userId}}/{{student.fullName}}/{{selectedClass._id}}/{{period.periodName}}">{{student.fullName}}</a></th>
               <th style="color: #5f9ea0">{{student| sumOfAllPoints | orderBy:sumOfAllPoints:reverse}}</th>
               <th ng-repeat="s in student.scores| filterTasks:{tasks: period.tasks, filterText: filteredTasks,header: false,likeMatch: likeMatch}">
                 <input type="number" min="0" max="{{s.maxScore}}"
@@ -149,7 +150,7 @@
     <button ng-click="savePeriod()" ng-disabled="studyPointForm.$invalid || studyPointForm.$pristine" ng-show="period" class="btn btn-success"
             style="margin-top: 0.5em;">Save
     </button>
-    <span style="max-width:  1em;margin-left: 2em;" class="alert alert-danger alert-block" role="alert" ng-show="!studyPointForm.$valid"  ng-cloak style="margin: 1em;">
+    <span style="max-width:  1em;margin-left: 2em;" class="alert alert-danger alert-block" role="alert" ng-show="!studyPointForm.$valid"  ng-cloak >
       Correct invalid fields before saving
     </span>
     <span style="max-width:  1em;margin-top: 2em;"  class="alert alert-success alert-block" role="alert" ng-show="safeStatus"  ng-cloak style="margin: 1em;">

@@ -13,10 +13,45 @@
       <property name="eclipselink.canonicalmodel.subpackage" value="development"/>
     </properties>
   </persistence-unit>
+  <persistence-unit name="PU-LocalXX" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <non-jta-data-source>java:comp/env/jdbc/POINTS_DB</non-jta-data-source>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="eclipselink.logging.level" value="INFO"/>
+      <property name="eclipselink.canonicalmodel.subpackage" value="LocalWithConnectionPool"/>
+    </properties>
+  </persistence-unit>
+  
+  
+  <persistence-unit name="PU_DIGITAL_OCEAN_STUDYPOINTS" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <non-jta-data-source>java:comp/env/jdbc/STUDYPOINTS</non-jta-data-source>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="eclipselink.logging.level" value="INFO"/>
+      <property name="eclipselink.canonicalmodel.subpackage" value="StudyPointsConnectionPool"/>
+    </properties>
+  </persistence-unit>
+  
+  
+  <persistence-unit name="PU_DIGITAL_OCEAN" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <non-jta-data-source>java:comp/env/jdbc/POINTS_DB_DIGITAL_OCEAN</non-jta-data-source>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="eclipselink.logging.level" value="INFO"/>
+      <property name="eclipselink.canonicalmodel.subpackage" value="DigitalOceanConnectionPool"/>      
+    </properties>
+  </persistence-unit>
+  
+  
   <persistence-unit name="PU_OPENSHIFT" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <non-jta-data-source>java:/comp/env/jdbc/MySQLDS</non-jta-data-source>
-    <!--<non-jta-data-source>java:jboss/datasources/MySQLDS</non-jta-data-source>-->
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
@@ -25,4 +60,18 @@
       <!--     <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>-->
     </properties>
   </persistence-unit>
+  <!--  <persistence-unit name="PU_DIGITAL_OCEAN" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <non-jta-data-source>java:/comp/env/jdbc/MySQLDS</non-jta-data-source>
+    <non-jta-data-source>java:jboss/datasources/MySQLDS</non-jta-data-source>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://188.166.166.104:3306/studypoints"/>
+      <property name="javax.persistence.jdbc.password" value="tt345ttt"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.user" value="spuser"/>
+      <property name="eclipselink.logging.level" value="FINE"/>
+      <property name="eclipselink.canonicalmodel.subpackage" value="digital_ocean"/>
+    </properties>
+  </persistence-unit>-->
 </persistence>

@@ -15,6 +15,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import security.AuthenticatedUser;
 import security.PasswordStorage;
 
 @Path("remotelogin")
@@ -30,8 +31,9 @@ public class RememoteLogin {
     JsonObject responseJson = new JsonObject();
     //String role;
     List<String> roles;
-    if ((roles=Login.authenticate(username, password))!=null) { 
-      String token = Login.createToken(username, "lam@cphbusieness.dk",roles);    
+    AuthenticatedUser userDetails = null;
+    if ((userDetails=Login.authenticate(username, password))!=null) { 
+      String token = Login.createToken(username, "lam@cphbusieness.dk",userDetails);    
       responseJson.addProperty("username", username);
       responseJson.addProperty("token", token);  
       return Response.

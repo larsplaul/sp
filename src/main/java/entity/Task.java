@@ -42,6 +42,10 @@ public class Task implements Serializable {
   private String code = null;
 
   public String getCode() {
+    return getCode(new Date());
+  }
+  public String getCode(Date now) {
+    hasValidCode(now); //This will set code to null, if timed out
     return code;
   }
 
@@ -76,7 +80,6 @@ public class Task implements Serializable {
 //    }
 //    System.out.println("Allow: "+allowAutoAttendance+", code: "+(code!= null)+", Time: "+time+", Allowed: "+allowed);
     if(allowAutoAttendance && code!= null && ((codeCreated.getTime()+60*1000 *CODE_TIMEOUT_MINUTES) >  now.getTime())) {
-      //System.out.println("TRUE");
       return true;
     }
     //Assuming that reason was a timeout for the code

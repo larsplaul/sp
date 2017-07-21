@@ -67,7 +67,7 @@ public class AllRoles {
     return Response
             .status(200)
             .header("Access-Control-Allow-Origin", "*")
-            .entity(jsonAssembler.getStudyPointsForCurrentUser(classId, user))
+            .entity(jsonAssembler.getStudyPointsForCurrentUser(classId, user,false))
             .build();
   }
 
