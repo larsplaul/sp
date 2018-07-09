@@ -30,6 +30,9 @@ public class DeploymentConfiguration implements ServletContextListener {
   @Override
   @SuppressWarnings("empty-statement")
   public void contextInitialized(ServletContextEvent sce) {
+    System.out.println("######################################################################################");
+    System.out.println("############################ In ContextIntialized ####################################");
+    System.out.println("######################################################################################");
 
     //Handling init-params from the properties file (secrets that should not be pushed to GIT)
     InputStream input = null;
@@ -42,10 +45,13 @@ public class DeploymentConfiguration implements ServletContextListener {
       }
       prop.load(input);
 
-      String ips = prop.getProperty("ips");
-      if (ips != null) {
-        utils.ValidIps.setValidIps(ips);
-      }
+      //TODO Figure out whether this should be given via props, or via a DB-table
+//      String ips = prop.getProperty("ips");
+//      if (ips != null) {
+//        utils.ValidIps.setValidIps(ips);
+//      }
+      
+      
   
       System.out.println(String.format("Mail: %1$s, %2$s, %3$s",prop.getProperty("mailServer"), prop.getProperty("mailUser"), prop.getProperty("mailPassword")));
       MailSender.initConstants(prop.getProperty("mailServer"), prop.getProperty("mailUser"), prop.getProperty("mailPassword"));
@@ -85,6 +91,8 @@ public class DeploymentConfiguration implements ServletContextListener {
     }
     System.out.println("PU_NAME: " + PU_NAME);
 
+    
+    utils.ValidIps.setValidIpsFromDB();
     //Handling init-params from web.xml
     boolean isDebug = context.getInitParameter("debug").toLowerCase().equals("true");
 
@@ -117,11 +125,10 @@ public class DeploymentConfiguration implements ServletContextListener {
           user.addRole(admin);
           em.getTransaction().begin();
           em.persist(student);
-
           em.getTransaction().commit();
         } catch (Exception ex) {
           //Logger.getLogger(DeploymentConfiguration.class.getName()).log(Level.SEVERE, null, ex);
-          Logger.getLogger(DeploymentConfiguration.class.getName()).log(Level.SEVERE, "User alredy exist");
+          Logger.getLogger(DeploymentConfiguration.class.getName()).log(Level.SEVERE, "User already exist");
         }
       } finally {
         em.close();

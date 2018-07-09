@@ -183,10 +183,15 @@ public class JsonAssembler {
         jsonTask.addProperty("score", task.getStudyPointForStudent(studentId).getScore());
         //jsonTask.addProperty("studyPointId", task.getStudyPointForStudent(studentId).getId());
         jsonTask.addProperty("spId", task.getStudyPointForStudent(studentId).getId());
-        if (task.hasValidCode(now)) {
-           jsonTask.addProperty("auto", isValidIp? 1:0); //Value of auto 1: no need to provide code, 0 code must be provided (un-approved IP)
+        if (task.hasValidCode(now) && isValidIp) {
+           jsonTask.addProperty("auto", 1); //Value of auto 1: no need to provide code, 0 - code must be provided (un-approved IP)
            //jsonTask.addProperty("spId", task.getStudyPointForStudent(studentId).getId());
         }
+   /*   Replace the statements above with below, to add a response, 
+        which the client will use to add an input field to write "todays code" if not at school*/
+//        if (task.hasValidCode(now)) {
+//           jsonTask.addProperty("auto", isValidIp? 1:0); //Value of auto 1: no need to provide code, 0 code must be provided (un-approved IP)
+//        }
         jsonTasks.add(jsonTask);
       }
       jsonPeriod.add("tasks", jsonTasks);

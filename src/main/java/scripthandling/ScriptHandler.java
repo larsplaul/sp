@@ -19,6 +19,8 @@ public abstract class ScriptHandler {
   public static final String ASSIGN_POINTS = "_AssignPoints_";
   public static final String PERIOD_INFO = "_PeriodInfo_";
   public static final String CLASS_AND_STUDENTS = "_class_and_students_";
+  public static final String ADD_VALID_IPS = "_add_valid_ips_";  
+  
   
   protected String SEPARATOR = ";";
 
@@ -99,6 +101,8 @@ public abstract class ScriptHandler {
           return new ClassAndStudentsStrategy(script,sep);
         case ASSIGN_POINTS:
           return new AssignPointsStrategy(script,sep);
+        case ADD_VALID_IPS:
+          return new ValidIpsStrategy(script,sep);
       }
       throw new ScriptException(makeError(1, "Script does not include a known script-type in first line"));
     }

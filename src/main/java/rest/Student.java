@@ -108,10 +108,10 @@ public class Student {
   private boolean isValidIpForAutoRegister(String clientIp, HttpServletRequest requestContext) {
     //This is mainly to allow for local testing (remember to add 127.0.0.1 to the list of valid IP's)
     String clients_Ip = clientIp != null? clientIp :requestContext.getRemoteAddr();
-    System.out.println("ClientIP: "+ clients_Ip);
-    System.out.println("IP from Proxy: "+ clientIp);
-    boolean ignoreCode = utils.ValidIps.isAValidIP(clients_Ip);
-    return ignoreCode;
+    //System.out.println("ClientIP: "+ clients_Ip);
+    //System.out.println("IP from Proxy: "+ clientIp);
+    boolean validIP = utils.ValidIps.isAValidIP(clients_Ip);
+    return validIP;
   }
 /*
   Meant to be used from mobile client

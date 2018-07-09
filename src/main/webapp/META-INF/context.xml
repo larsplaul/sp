@@ -1,46 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/studyPointMaven">
-   <!-- Default set of monitored resources -->
-<!--    <WatchedResource>WEB-INF/web.xml</WatchedResource>-->
-<!-- url="jdbc:mysql://165.227.136.141:3306/studypoints"-->
- 
- <!-- Mydemos
+  <!-- Default set of monitored resources -->
+  <!--    <WatchedResource>WEB-INF/web.xml</WatchedResource>-->
+  <!-- url="jdbc:mysql://165.227.136.141:3306/studypoints"-->
+  <!-- Mydemos
  url="jdbc:mysql://188.166.166.104:3306/studypoints"
  -->
-    <Resource name="jdbc/POINTS_DB_DIGITAL_OCEAN"
-              url="jdbc:mysql://188.166.166.104:3306/studypoints" 
-              driverClassName="com.mysql.jdbc.Driver"
-              username="spuser"
-              password="tt345ttt"
-              auth="Container"
-              type="javax.sql.DataSource"
-              maxIdle="5"
-              maxTotal="20"
-              maxWaitMillis="10000"
-              />
-    
-    <Resource name="jdbc/STUDYPOINTS"
-              url="jdbc:mysql://165.227.136.141:3306/studypoints" 
-              driverClassName="com.mysql.jdbc.Driver"
-              username="spuser"
-              password="tt345ttt"
-              auth="Container"
-              type="javax.sql.DataSource"
-              maxIdle="5"
-              maxTotal="20"
-              maxWaitMillis="10000"
-              />
-    
-    <Resource name="jdbc/POINTS_DB"
-              url="jdbc:mysql://localhost:3306/point2"
-              driverClassName="com.mysql.jdbc.Driver"
-              username="root"
-              password="test"
-              auth="Container"
-              type="javax.sql.DataSource"
-              maxActive="20"
-              maxIdle="5"
-              maxWait="10000"
-              />
-               
+  <!-- Used by mydemos.dk -->
+  <Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxIdle="5" maxTotal="20" maxWaitMillis="10000" name="jdbc/POINTS_DB_DIGITAL_OCEAN" password="tt345ttt" type="javax.sql.DataSource" url="jdbc:mysql://188.166.166.104:3306/studypoints" username="spuser"/>
+  <!-- Used by studypoints.dk -->
+  <Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxIdle="5" maxTotal="20" maxWaitMillis="10000" name="jdbc/STUDYPOINTS" password="tt345ttt" type="javax.sql.DataSource" url="jdbc:mysql://165.227.136.141:3306/studypoints" username="spuser"/>
+  <Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxActive="20" maxIdle="5" maxWait="10000" name="jdbc/POINTS_DB" password="test" type="javax.sql.DataSource" url="jdbc:mysql://localhost:3306/point2" username="root"/>
 </Context>

@@ -33,7 +33,8 @@ public class RememoteLogin {
     List<String> roles;
     AuthenticatedUser userDetails = null;
     if ((userDetails=Login.authenticate(username, password))!=null) { 
-      String token = Login.createToken(username, "lam@cphbusieness.dk",userDetails);    
+      //Add a type (last argument) to indicate token is made from a remote login
+      String token = Login.createToken(username, "lam@cphbusiness.dk",userDetails,"browser");    
       responseJson.addProperty("username", username);
       responseJson.addProperty("token", token);  
       return Response.

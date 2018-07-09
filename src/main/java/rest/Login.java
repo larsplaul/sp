@@ -30,6 +30,8 @@ import javax.ws.rs.core.Response;
 import security.PasswordStorage;
 import security.Secrets;
 import facade.LogMessage;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
 import security.AuthenticatedUser;
 
 @Path("login")
@@ -38,7 +40,10 @@ public class Login {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response login(String jsonString) throws JOSEException, AuthenticationException {
+  public Response login(@Context HttpServletRequest requestContext, String jsonString) throws JOSEException, AuthenticationException {
+    String device = requestContext.getHeader("ClientDevice");  //Find a better way to do this
+    String clientType = device!= null ? device: "browser";
+    //System.out.println("DEVICE TYPE ----> "+clientType);
     JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
     String username = json.get("username").getAsString();
     String password = json.get("password").getAsString();
@@ -49,10 +54,10 @@ public class Login {
     AuthenticatedUser userDetails = null;
     try {
       if ((userDetails = authenticate(username, password)) != null) {
-        String token = createToken(username, "lam@cphbusiness.dk", userDetails);
+        String token = createToken(username, "lam@cphbusiness.dk", userDetails,clientType);
         responseJson.addProperty("username", username);
         responseJson.addProperty("token", token);
-        LogFacade.addLogEntry(username, LogMessage.okLogin);
+        LogFacade.addLogEntry(username, LogMessage.okLogin, clientType);
         return Response.ok(new Gson().toJson(responseJson)).header("Access-Control-Allow-Origin", "*").build();
       }
     } catch (PasswordStorage.CannotPerformOperationException | PasswordStorage.InvalidHashException ex) {
@@ -84,11 +89,13 @@ public class Login {
     return facade.authenticateUser(userName, password);
   }
 
-  static String createToken(String subject, String issuer, AuthenticatedUser userDetails) throws JOSEException {
-
+  static String createToken(String subject, String issuer, AuthenticatedUser userDetails, String clientType) throws JOSEException {
+    Date date = new Date();
+    //Provide a long-lived token (four months) for mobile devices
+    Date exportationTime = clientType.equals("browser") ?  new Date(date.getTime() + 1000 * 60 * 60): 
+                                                           new Date(date.getTime() + 1000 * 60 * 60 * 24 * 120);
     StringBuilder res = new StringBuilder();
     JWSSigner signer = new MACSigner(Secrets.SHARED_SECRET);
-    Date date = new Date();
     JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
             .subject(subject)
             .claim("username", subject)
@@ -97,7 +104,8 @@ public class Login {
             .claim("ln", userDetails.getLastName())
             .claim("issuer", issuer)
             .issueTime(date)
-            .expirationTime(new Date(date.getTime() + 1000 * 60 * 60))
+            //.expirationTime(new Date(date.getTime() + 1000 * 60 * 60))
+            .expirationTime(exportationTime)
             .build();
     SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
     signedJWT.sign(signer);

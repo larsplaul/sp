@@ -38,7 +38,11 @@ public class LogFacade {
       try{
         em.getTransaction().begin();
         //Details not used, until column is changed to handle more than 255 chars
-        Log_Info li = new Log_Info(userName, event);
+        // 150 to save space
+        if(details.length() >=150){
+          details = details.substring(0,150);
+        } 
+        Log_Info li = new Log_Info(userName, event,details);
         em.persist(li);
         em.getTransaction().commit();
       }finally{

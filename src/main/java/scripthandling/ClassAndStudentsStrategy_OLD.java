@@ -20,12 +20,12 @@ import security.PasswordStorage;
  *
  * @author plaul1
  */
-public class ClassAndStudentsStrategy extends ScriptHandler {
+public class ClassAndStudentsStrategy_OLD extends ScriptHandler {
 
   public static final String FRIENDLY_TAG = "_friendlyname_";
   public static final String MAX_POINTS = "_maxpoints_required_";
 
-  protected ClassAndStudentsStrategy(String script,String separator) {
+  protected ClassAndStudentsStrategy_OLD(String script,String separator) {
     super(script,separator);
   }
 

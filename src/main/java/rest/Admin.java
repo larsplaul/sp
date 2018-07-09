@@ -213,7 +213,6 @@ public class Admin {
   @Consumes("application/json")
   public Response editPeriodJson(String scoresAsJson){
     jsonAssembler.editStudyPoints(scoresAsJson);
-    
     String user = securityContext.getUserPrincipal().getName();
     LogFacade.addLogEntry(user, LogMessage.editPeriodJson);
     

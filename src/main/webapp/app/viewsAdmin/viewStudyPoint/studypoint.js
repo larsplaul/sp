@@ -157,7 +157,7 @@ app.controller('AdminStudyPointCtrl', function ($scope, $http, $modal, $location
     } else {
       getPeriod(id);
     }
-  }
+  };
 
   function getPeriod(id) {
     $scope.loading = true;
@@ -168,6 +168,20 @@ app.controller('AdminStudyPointCtrl', function ($scope, $http, $modal, $location
               $scope.loading = false;
 
               $scope.rows = $scope.period.students.length;
+              //XXXXXXXXXXXXXXXXXXXXXXX
+
+              $scope.originalPoints = [];
+              $scope.period.students.forEach(function (student) {
+                student.scores.forEach(function (s) {
+                  var score = {};
+                  score.id = s.id;
+                  score.score = s.score;
+                  $scope.originalPoints.push(score);
+                });
+              });
+              //*****************************************
+
+
 
               $scope.studyPointForm.$dirty = false;
             })
@@ -183,7 +197,7 @@ app.controller('AdminStudyPointCtrl', function ($scope, $http, $modal, $location
 
     $http.get("api/admin/attendancecode/" + id)
             .success(function (data, status, headers, config) {
-    
+
               var thisClass = $scope.period.classId;
               var period = $scope.period.periodName;
               $scope.period = null;
@@ -193,8 +207,8 @@ app.controller('AdminStudyPointCtrl', function ($scope, $http, $modal, $location
                 resolve: {
                   info: function () {
                     return {
-                      code:data.code,
-                      thisClass: thisClass ,
+                      code: data.code,
+                      thisClass: thisClass,
                       period: period
                     };
                   }
@@ -214,11 +228,21 @@ app.controller('AdminStudyPointCtrl', function ($scope, $http, $modal, $location
 
     $scope.period.students.forEach(function (student) {
       student.scores.forEach(function (score) {
-        scores.push({id: score.id, score: score.score});
+        //TODO XXXXXXXXXXXXXXXX
+        var org = $scope.originalPoints;
+        var wasChanged = org.filter(function (s) {
+          return s.id === score.id && s.score != score.score;
+        }).length > 0;
+        if (wasChanged) {
+          scores.push({id: score.id, score: score.score});
+        }
+        //************************************
+        //scores.push({id: score.id, score: score.score});
       });
     });
     $scope.saving = true;
     $scope.period = null;
+     
     $http.put("api/admin/scores", scores)
             .success(function (data, status, headers, config) {
               //TODO--> Should we return status ??? 
@@ -255,12 +279,12 @@ app.controller('DirtyFormCtrl', function ($scope, $modalInstance) {
 
 app.controller('showCodeCtrl', function ($scope, $modalInstance, info) {
 
-  
-  
-   $scope.code = info.code;
-   $scope.thisclass = info.thisClass;
+
+
+  $scope.code = info.code;
+  $scope.thisclass = info.thisClass;
   $scope.period = info.period;
-  $scope.url = location.protocol + "//" + location.host+"//"+location.pathname;
+  $scope.url = location.protocol + "//" + location.host + "//" + location.pathname;
   $modalInstance.close();
   $scope.saveChanges = function () {
     $modalInstance.close();
